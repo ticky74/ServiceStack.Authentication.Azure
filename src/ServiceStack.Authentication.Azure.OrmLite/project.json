@@ -1,0 +1,44 @@
+{
+  "version": "1.0.0-*",
+  "buildOptions": {
+    "debugType": "portable"
+  },
+
+  "dependencies": {
+    "ServiceStack.Authentication.Azure.ServiceModel": {
+      "target": "project"
+    }
+  },
+
+  "frameworks": {
+    "net452": {
+      "dependencies": {
+        "System.Data.Common": "*",
+        "ServiceStack.Interfaces": "4.5.4",
+        "ServiceStack.Common": "4.5.4",
+        "ServiceStack.OrmLite": "4.5.4",
+        "ServiceStack.Text": "4.5.4"
+      }
+    },
+    "net462": {
+      "dependencies": {
+        "System.Data.Common": "*",
+        "ServiceStack.Interfaces": "4.5.4",
+        "ServiceStack.Common": "4.5.4",
+        "ServiceStack.OrmLite": "4.5.4",
+        "ServiceStack.Text": "4.5.4"
+
+      }
+    },
+    "netstandard1.6": {
+      "dependencies": {
+        "NETStandard.Library": "1.6.0",
+        "System.Data.Common": "*",
+        "ServiceStack.Interfaces.Core": "1.0.23",
+        "ServiceStack.Common.Core": "1.0.23",
+        "ServiceStack.OrmLite.Core": "1.0.23",
+        "ServiceStack.Text.Core": "1.0.23"
+      }
+    }
+  }
+}

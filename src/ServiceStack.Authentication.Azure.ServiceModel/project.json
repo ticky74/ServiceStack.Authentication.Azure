@@ -1,0 +1,25 @@
+{
+  "version": "1.0.0-*",
+  "buildOptions": {
+    "debugType": "portable"
+  },
+
+  "frameworks": {
+    "net452": {
+      "dependencies": {
+        "ServiceStack.Interfaces": "4.5.4"
+      }
+    },
+    "net462": {
+      "dependencies": {
+        "ServiceStack.Interfaces": "4.5.4"
+      }
+    },
+    "netstandard1.6": {
+      "dependencies": {
+        "NETStandard.Library": "1.6.0",
+        "ServiceStack.Interfaces.Core": "1.0.23"
+      }
+    }
+  }
+}

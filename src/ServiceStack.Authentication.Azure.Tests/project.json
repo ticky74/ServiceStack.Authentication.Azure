@@ -1,0 +1,66 @@
+{
+  "version": "1.0.0-*",
+  "buildOptions": {
+    "debugType": "portable"
+  },
+  "dependencies": {
+    "System.Runtime.Serialization.Primitives": "*",
+    "xunit": "2.1.0",
+    "dotnet-test-xunit": "1.0.0-rc2-build10015",
+    "Moq": "4.5.23",
+    "System.Data.SQLite.Core": "1.0.103",
+    "SQLite.Net-PCL": "3.0.5",
+    "ServiceStack.Authentication.Azure" : {
+      "target": "project"
+    },
+    "ServiceStack.Authentication.Azure.ServiceModel" : {
+      "target": "project"
+    },
+    "ServiceStack.Authentication.Azure.OrmLite" : {
+      "target": "project"
+    }
+  },
+  "testRunner": "xunit",
+  "frameworks": {    
+    "net452": {
+      "dependencies": {
+        "System.Data.Common": "*",
+        "ServiceStack.Interfaces": "4.5.4",
+        "ServiceStack.Common": "4.5.4",
+        "ServiceStack.OrmLite": "4.5.4",
+        "ServiceStack.Text": "4.5.4",
+        "ServiceStack.OrmLite.Sqlite.Windows": "4.5.4"
+      }
+    },
+    "net462": {
+      "dependencies": {
+        "System.Data.Common": "*",
+        "ServiceStack.Interfaces": "4.5.4",
+        "ServiceStack.Common": "4.5.4",
+        "ServiceStack.OrmLite": "4.5.4",
+        "ServiceStack.Text": "4.5.4",
+        "Microsoft.Data.SQLite": "*",
+        "ServiceStack.OrmLite.Sqlite.Windows": "4.5.4"
+      }
+    }
+    // "netcoreapp1.0": {
+    //   "dependencies": {
+    //     "Microsoft.NETCore.App": {
+    //       "type": "platform",
+    //       "version": "1.0.1"
+    //     },
+    //     "System.Data.Common": "*",
+    //     "ServiceStack.Interfaces.Core": "1.0.23",
+    //     "ServiceStack.Common.Core": "1.0.23",
+    //     "ServiceStack.OrmLite.Core": "1.0.23",
+    //     "ServiceStack.Text.Core": "1.0.23",
+    //     "ServiceStack.OrmLite.SqlIte.Core": "1.0.23",
+        
+    //   },
+    //   "imports": [
+    //     "dotnet5.4",
+    //     "portable-net451+win8"
+    //   ]
+    // }
+  }
+}

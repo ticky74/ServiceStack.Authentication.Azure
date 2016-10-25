@@ -1,0 +1,25 @@
+﻿{
+  "version": "1.0.0-*",
+  "description": "ServiceStack-Authentication-Azure-OrmLite Class Library",
+  "authors": [ "ian.kulmatycki" ],
+  "tags": [ "" ],
+  "projectUrl": "",
+  "licenseUrl": "",
+
+  "dependencies": {
+    "System.Data.Common": "4.1.0",
+    "ServiceStack.Interfaces": "4.5.4",
+    "ServiceStack.Common": "4.5.4",
+    "ServiceStack.OrmLite": "4.5.4",
+    "ServiceStack.Text": "4.5.4",
+    "ServiceStack-Authentication-Azure-ServiceModel": "1.0.0-*"
+  },
+
+  "frameworks": {
+    "net451": { },
+    "net452": { },
+    "net46": { },
+    "net461": { },
+    "net462": { }
+  }
+}

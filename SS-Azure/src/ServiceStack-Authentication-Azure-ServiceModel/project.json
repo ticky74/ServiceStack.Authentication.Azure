@@ -1,0 +1,18 @@
+﻿{
+  "version": "1.0.0-*",
+  "description": "ServiceStack-Authentication-Azure-ServiceModel Class Library",
+  "authors": [ "ticky74" ],
+
+  "dependencies": {
+    "ServiceStack.Interfaces": "4.5.4"
+  },
+
+  "frameworks": {
+    "net45": { },
+    "net451": { },
+    "net452": { },
+    "net46": { },
+    "net461": { },
+    "net462": { }
+  }
+}

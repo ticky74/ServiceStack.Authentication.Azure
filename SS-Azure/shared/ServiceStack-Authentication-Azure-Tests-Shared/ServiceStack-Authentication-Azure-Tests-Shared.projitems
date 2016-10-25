@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>2a885a0a-e1eb-464f-beb9-ec4ce0518acc</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>ServiceStack_Authentication_Azure_Tests_Shared</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)AppSettingsRegistryServiceTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AzureGraphAuthProviderTests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GraphAuthServiceTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OrmLiteApplicationRegistryServiceTest.cs" />
+  </ItemGroup>
+</Project>

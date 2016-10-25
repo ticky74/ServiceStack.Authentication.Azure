@@ -1,0 +1,40 @@
+{
+  "version": "1.0.0-*",
+  "buildOptions": {
+    "debugType": "portable"
+  },
+  "dependencies": {
+    "Microsoft.IdentityModel.Logging": "1.0.0",
+    "Microsoft.IdentityModel.Tokens": "5.0.0",
+    "System.IdentityModel.Tokens.Jwt": "5.0.0",
+    "ServiceStack.Authentication.Azure.ServiceModel": {
+      "target" : "project"
+    }
+  },
+  "frameworks": {    
+    "net452": {
+      "dependencies": {
+        "System.Web.Http.Common": "*",
+        "ServiceStack": "4.5.4",
+        "ServiceStack.Interfaces": "4.5.4",
+        "ServiceStack.Common": "4.5.4"
+      }
+    },
+    "net462": {
+      "dependencies": {
+        "System.Web.Http.Common": "*",
+        "ServiceStack": "4.5.4",
+        "ServiceStack.Interfaces": "4.5.4",
+        "ServiceStack.Common": "4.5.4"
+      }
+    },
+    "netstandard1.6": {
+      "dependencies": {
+        "NETStandard.Library": "1.6.0",
+        "ServiceStack.Core": "1.0.23",
+        "ServiceStack.Interfaces.Core": "1.0.23",
+        "ServiceStack.Common.Core": "1.0.23",
+      }
+    }
+  }
+}
