@@ -204,12 +204,10 @@ namespace ServiceStack_Authentication_Azure_Tests_Shared
                     var tokens = session.GetAuthTokens("ms-graph");
                     Assert.NotNull(tokens);
                     Assert.Equal(tokens.Provider, "ms-graph");
-                Assert.Equal(tokens.AccessTokenSecret, TokenHelper.AccessToken);
+                    Assert.Equal(tokens.AccessTokenSecret, TokenHelper.AccessToken);
                     Assert.NotNull(tokens.RefreshTokenExpiry);
-                    Assert.Equal(TokenHelper.ExpiresDate.ToUniversalTime(), tokens.RefreshTokenExpiry);
                     Assert.Equal(tokens.RefreshToken, TokenHelper.RefreshToken);
 
-                //                    tokens.RefreshToken.Should().Be("AwABAAAAvPM1KaPlrEqdFSBzjqfTGAMxZGUTdM0t4B4rTfgV29ghDOHRc2B-C_hHeJaJICqjZ3mY2b_YNqmf9SoAylD1PycGCB90xzZeEDg6oBzOIPfYsbDWNf621pKo2Q3GGTHYlmNfwoc-OlrxK69hkha2CF12azM_NYhgO668yfcUl4VBbiSHZyd1NVZG5QTIOcbObu3qnLutbpadZGAxqjIbMkQ2bQS09fTrjMBtDE3D6kSMIodpCecoANon9b0LATkpitimVCrl-NyfN3oyG4ZCWu18M9-vEou4Sq-1oMDzExgAf61noxzkNiaTecM-Ve5cq6wHqYQjfV9DOz4lbceuYCAA");
                     Assert.Equal(tokens.UserId, "d542096aa0b94e2195856b57e43257e4"); // oid
                     Assert.Equal(tokens.UserName, "some.user@foodomain.com");
                     Assert.Equal(tokens.LastName, "User");
@@ -219,10 +217,134 @@ namespace ServiceStack_Authentication_Azure_Tests_Shared
                     Assert.Equal(session.LastName, tokens.LastName);
                     Assert.Equal(session.FirstName, tokens.FirstName);
                     Assert.Equal(session.DisplayName, tokens.DisplayName);
-//                    var result = (IHttpResult)response;
-//                    result.Headers["Location"].Should().StartWith(
-//                        "http://localhost#s=1");
+                    var result = (IHttpResult)response;
+                    Assert.True(result.Headers["Location"].StartsWith("http://localhost#s=1"));
                 }
+        }
+
+        [Fact]
+        public void ShouldSetReferrerFromRedirectParam()
+        {
+            var subject = new AzureGraphAuthenticationProvider(new TestAzureGraphService());
+            var auth = new Authenticate
+            {
+                UserName = "some.user@foodomain.com"
+            };
+
+            var request = new MockHttpRequest("myapp", "GET", "text", "/myapp", new NameValueCollection
+            {
+                {"redirect", "http://localhost/myapp/secure-resource"}
+            }, Stream.Null, null);
+            var mockAuthService = MockAuthService(request);
+            var session = new AuthUserSession();
+
+            subject.Authenticate(mockAuthService.Object, session, auth);
+
+            Assert.Equal(session.ReferrerUrl, "http://localhost/myapp/secure-resource");
+        }
+
+        [Fact]
+        public void ShouldNotAuthenticateIfDirectoryNameNotMatched()
+        {
+            var subject = new AzureGraphAuthenticationProvider(new TestAzureGraphService());
+            var auth = new Authenticate
+            {
+                UserName = "some.user@foodomain.com"
+            };
+            subject.CallbackUrl = "http://localhost/myapp/";
+            var request = new MockHttpRequest("myapp", "GET", "text", "/myapp", new NameValueCollection
+            {
+                {"code", "code123"},
+                {"state", "D79E5777-702E-4260-9A62-37F75FF22CCE"}
+            }, Stream.Null, null);
+            var mockAuthService = MockAuthService(request);
+            using (new HttpResultsFilter
+            {
+                StringResult =
+                    @"{
+                          ""access_token"": ""token456"",
+                          ""id_token"": ""eyJ0eXAiOiJKV1QiLCJhbGciOiJub25lIn0.eyJhdWQiOiIyZDRkMTFhMi1mODE0LTQ2YTctODkwYS0yNzRhNzJhNzMwOWUiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC83ZmU4MTQ0Ny1kYTU3LTQzODUtYmVjYi02ZGU1N2YyMTQ3N2UvIiwiaWF0IjoxMzg4NDQwODYzLCJuYmYiOjEzODg0NDA4NjMsImV4cCI6MTM4ODQ0NDc2MywidmVyIjoiMS4wIiwidGlkIjoiN2ZlODE0NDctZGE1Ny00Mzg1LWJlY2ItNmRlNTdmMjE0NzdlIiwib2lkIjoiNjgzODlhZTItNjJmYS00YjE4LTkxZmUtNTNkZDEwOWQ3NGY1IiwidXBuIjoiZnJhbmttQGNvbnRvc28uY29tIiwidW5pcXVlX25hbWUiOiJmcmFua21AY29udG9zby5jb20iLCJzdWIiOiJKV3ZZZENXUGhobHBTMVpzZjd5WVV4U2hVd3RVbTV5elBtd18talgzZkhZIiwiZmFtaWx5X25hbWUiOiJNaWxsZXIiLCJnaXZlbl9uYW1lIjoiRnJhbmsifQ.""
+                        }"
+            })
+            {
+                var session = new AuthUserSession();
+
+                try
+                {
+                    subject.Authenticate(mockAuthService.Object, session, auth);
+                }
+                catch (UnauthorizedAccessException)
+                {
+                }
+
+                Assert.False(session.IsAuthenticated);
+            }
+        }
+
+        [Fact]
+        public void ShouldSaveOAuth2StateValue()
+        {
+            var subject = new AzureGraphAuthenticationProvider(new TestAzureGraphService());
+            var auth = new Authenticate
+            {
+                UserName = "some.user@foodomain.com"
+            };
+            var session = new AuthUserSession();
+
+            var response = subject.Authenticate(MockAuthService().Object, session, auth);
+
+            var result = (IHttpResult) response;
+            var codeRequest = new Uri(result.Headers["Location"]);
+            var query = PclExportClient.Instance.ParseQueryString(codeRequest.Query);
+            var state = query["state"];
+            Assert.Equal(session.State, state);
+        }
+
+
+        [Fact]
+        public void ShouldAbortIfStateValuesDoNotMatch()
+        {
+            var subject = new AzureGraphAuthenticationProvider(new TestAzureGraphService());
+            var auth = new Authenticate
+            {
+                UserName = "some.user@foodomain.com"
+            };
+
+            subject.CallbackUrl = "http://localhost/myapp/";
+            var request = new MockHttpRequest("myapp", "GET", "text", "/myapp", new NameValueCollection
+            {
+                {"code", "code123"},
+                {"session_state", "dontcare"},
+                {"state", "state123"}
+            }, Stream.Null, null);
+            var mockAuthService = MockAuthService(request);
+            using (new HttpResultsFilter
+            {
+                StringResultFn = (tokenRequest, s) =>
+                {
+                    return @"{
+                          ""access_token"": ""fake token"",
+                          ""id_token"": ""eyJ0eXAiOiJKV1QiLCJhbGciOiJub25lIn0.eyJhdWQiOiIyZDRkMTFhMi1mODE0LTQ2YTctODkwYS0yNzRhNzJhNzMwOWUiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC83ZmU4MTQ0Ny1kYTU3LTQzODUtYmVjYi02ZGU1N2YyMTQ3N2UvIiwiaWF0IjoxMzg4NDQwODYzLCJuYmYiOjEzODg0NDA4NjMsImV4cCI6MTM4ODQ0NDc2MywidmVyIjoiMS4wIiwidGlkIjoiN2ZlODE0NDctZGE1Ny00Mzg1LWJlY2ItNmRlNTdmMjE0NzdlIiwib2lkIjoiNjgzODlhZTItNjJmYS00YjE4LTkxZmUtNTNkZDEwOWQ3NGY1IiwidXBuIjoiZnJhbmttQGNvbnRvc28uY29tIiwidW5pcXVlX25hbWUiOiJmcmFua21AY29udG9zby5jb20iLCJzdWIiOiJKV3ZZZENXUGhobHBTMVpzZjd5WVV4U2hVd3RVbTV5elBtd18talgzZkhZIiwiZmFtaWx5X25hbWUiOiJNaWxsZXIiLCJnaXZlbl9uYW1lIjoiRnJhbmsifQ.""
+                        }";
+
+                }
+            })
+            {
+                var session = new AuthUserSession
+                {
+                    State = "state133" // Not the same as the state in the request above
+                };
+
+                try
+                {
+                    subject.Authenticate(mockAuthService.Object, session, auth);
+                }
+                catch (UnauthorizedAccessException)
+                {
+                }
+
+                Assert.False(session.IsAuthenticated);
+            }
         }
 
         internal Mock<IServiceBase> MockAuthService(MockHttpRequest request = null)
