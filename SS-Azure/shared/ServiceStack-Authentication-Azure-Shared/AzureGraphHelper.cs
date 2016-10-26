@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Specialized;
 using ServiceStack.Auth;
 using ServiceStack.Authentication.Azure.ServiceModel.Entities;
@@ -5,8 +6,10 @@ using ServiceStack.Text;
 
 namespace ServiceStack.Authentication.Azure
 {
+    [Obsolete]
     public static class GraphHelper
     {
+
         public static object GetMemberGroups(string bearerToken)
         {
             var groups =

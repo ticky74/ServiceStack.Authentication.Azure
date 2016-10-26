@@ -12,6 +12,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)Entities\ApplicationRegistration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Me.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IApplicationRegistryService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IAzureGraphService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Requests\AuthCodeRequest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Requests\AuthTokenRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Requests\RegisteredDomainCheck.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Requests\TokenResponse.cs" />
   </ItemGroup>
 </Project>

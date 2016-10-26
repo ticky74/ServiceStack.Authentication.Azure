@@ -4,8 +4,11 @@ using System.Collections.Specialized;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net;
+using System.Security.Claims;
 using System.Text;
 using ServiceStack.Auth;
+using ServiceStack.Authentication.Azure.ServiceModel;
+using ServiceStack.Authentication.Azure.ServiceModel.Requests;
 using ServiceStack.Configuration;
 using ServiceStack.Text;
 using ServiceStack.Web;
@@ -15,16 +18,20 @@ namespace ServiceStack.Authentication.Azure
     public class AzureGraphAuthenticationProvider : OAuthProvider
     {
         private string _failureRedirectPath;
+        private readonly IAzureGraphService _graphService;
 
-        public AzureGraphAuthenticationProvider()
-            : this(new AppSettings())
+        public AzureGraphAuthenticationProvider(IAzureGraphService graphService)
+            : this(new AppSettings(), graphService)
         {
         }
 
-        public AzureGraphAuthenticationProvider(IAppSettings settings)
+        public AzureGraphAuthenticationProvider(IAppSettings settings, IAzureGraphService graphService)
             : base(settings, MsGraph.Realm, MsGraph.ProviderName, "ClientId", "ClientSecret")
         {
-            this.AppSettings = settings;
+            // Default Scopes. Not sure if this is a bad idea @ticky74
+            Scopes = new[] {"User.Read", "offline_access", "openid", "profile"};
+            _graphService = graphService ?? new AzureGraphService();
+            AppSettings = settings;
             if (ServiceStackHost.Instance != null)
                 RegisterProviderService(ServiceStackHost.Instance);
         }
@@ -40,7 +47,7 @@ namespace ServiceStack.Authentication.Azure
                     throw new FormatException("FailureRedirectPath should start with '/'");
                 _failureRedirectPath = value;
             }
-        }
+        }       
 
         public TimeSpan RefreshTokenLifespan { get; set; } = TimeSpan.FromDays(13.9);
 
@@ -122,18 +129,39 @@ namespace ServiceStack.Authentication.Azure
                 if (registration == null)
                     throw new UnauthorizedAccessException($"Authorization for directory @{appDirectory} failed.");
 
-                var postData =
-                    $"grant_type=authorization_code&redirect_uri={CallbackUrl.UrlEncode()}&code={code}&client_id={registration.ClientId}&client_secret={registration.ClientSecret.UrlEncode()}&scope={BuildScopesFragment()}";
-                var result = MsGraph.TokenUrl.PostToUrl(postData);
+                try
+                {
+                    var tokenResponse = _graphService.RequestAuthToken(new AuthTokenRequest
+                    {
+                        CallbackUrl = CallbackUrl,
+                        Registration = registration,
+                        RequestCode = code,
+                        Scopes = Scopes
+                    });
 
-                var authInfo = JsonObject.Parse(result);
-                var authInfoNvc = authInfo.ToNameValueCollection();
-                if (HasError(authInfoNvc))
-                    return RedirectDueToFailure(authService, session, authInfoNvc);
-                tokens.AccessTokenSecret = authInfo["access_token"];
-                tokens.RefreshToken = authInfo["refresh_token"];
-                return OnAuthenticated(authService, session, tokens, authInfo.ToDictionary())
-                       ?? authService.Redirect(SuccessRedirectUrlFilter(this, session.ReferrerUrl.SetParam("s", "1")));
+                    tokens.AccessTokenSecret = tokenResponse.AccessToken;
+                    tokens.RefreshToken = tokenResponse.RefreshToken;
+
+                    return OnAuthenticated(authService, session, tokens, tokenResponse.AuthData.ToDictionary())
+                           ?? authService.Redirect(SuccessRedirectUrlFilter(this, session.ReferrerUrl.SetParam("s", "1")));
+                }
+                catch (AzureServiceException ase)
+                {
+                    return RedirectDueToFailure(authService, session, ase.ErrorData);
+                }
+
+//                var postData =
+//                    $"grant_type=authorization_code&redirect_uri={CallbackUrl.UrlEncode()}&code={code}&client_id={registration.ClientId}&client_secret={registration.ClientSecret.UrlEncode()}&scope={BuildScopesFragment()}";
+//                var result = MsGraph.TokenUrl.PostToUrl(postData);
+//
+//                var authInfo = JsonObject.Parse(result);
+//                var authInfoNvc = authInfo.ToNameValueCollection();
+//                if (HasError(authInfoNvc))
+//                    return RedirectDueToFailure(authService, session, authInfoNvc);
+//                tokens.AccessTokenSecret = authInfo["access_token"];
+//                tokens.RefreshToken = authInfo["refresh_token"];
+//                return OnAuthenticated(authService, session, tokens, authInfo.ToDictionary())
+//                       ?? authService.Redirect(SuccessRedirectUrlFilter(this, session.ReferrerUrl.SetParam("s", "1")));
             }
             catch (WebException webException)
             {
@@ -169,13 +197,17 @@ namespace ServiceStack.Authentication.Azure
             if (registration == null)
                 throw new UnauthorizedAccessException($"Authorization for directory @{appDirectory} failed.");
 
-            var state = Guid.NewGuid().ToString("N");
+            var codeRequestData = _graphService.RequestAuthCode(new AuthCodeRequest
+            {
+                CallbackUrl = this.CallbackUrl,
+                Registration = registration,
+                Scopes = this.Scopes,
+                UserName = request.UserName
+            });
             tokens.Items.Add("ClientId", registration.ClientId);
-            userSession.State = state;
-            var reqUrl =
-                $"{MsGraph.AuthorizationUrl}?client_id={registration.ClientId}&response_type=code&redirect_uri={CallbackUrl.UrlEncode()}&domain_hint={request.UserName}&scope={BuildScopesFragment()}&state={state}";
+            userSession.State = codeRequestData.State;
             authService.SaveSession(session, SessionExpiry);
-            return authService.Redirect(PreAuthUrlFilter(this, reqUrl));
+            return authService.Redirect(PreAuthUrlFilter(this, codeRequestData.AuthCodeRequestUrl));
         }
 
         // Implementation taken from @jfoshee Servicestack.Authentication.Aad
@@ -226,12 +258,7 @@ namespace ServiceStack.Authentication.Azure
             return !(info["error"] ?? info["error_uri"] ?? info["error_description"]).IsNullOrEmpty();
         }
 
-        private string BuildScopesFragment()
-        {
-            return
-                ((Scopes ?? new[] {"User.Read", "offline_access", "openid", "profile"}).Select(
-                    scope => $"{MsGraph.GraphUrl}/{scope} ").Join(" ")).UrlEncode();
-        }
+
 
         private static string GetDirectoryNameFromUsername(string userName)
         {
@@ -274,19 +301,19 @@ namespace ServiceStack.Authentication.Azure
             {
                 var accessToken = authInfo["access_token"];
 
-                var meData = GraphHelper.Me(accessToken);
+                var meData = _graphService.Me(accessToken);
                 tokens.FirstName = meData.FirstName;
                 tokens.LastName = meData.LastName;
                 tokens.Email = meData.Email;
                 tokens.Language = meData.Language;
                 tokens.PhoneNumber = meData.PhoneNumber;
 
-                var groups = GraphHelper.GetMemberGroups(accessToken);
-                tokens.Items["security-groups"] = (string) groups;
+                var groups = _graphService.GetMemberGroups(accessToken);
+                tokens.Items["security-groups"] = JsonSerializer.SerializeToString(groups);
             }
-            catch (Exception ex)
+            catch
             {
-                // No user profile related scope
+                // Ignore
             }
             return base.OnAuthenticated(authService, session, tokens, authInfo);
         }
@@ -303,6 +330,9 @@ namespace ServiceStack.Authentication.Azure
                 tokens.DisplayName = (string) p.GetValueOrDefault("name");
                 tokens.Items.Add("TenantId", (string) p["tid"]);
                 tokens.RefreshTokenExpiry = jwt.ValidFrom.Add(RefreshTokenLifespan);
+
+
+
 
                 if (SaveExtendedUserInfo)
                     p.Each(x => authInfo[x.Key] = x.Value.ToString());

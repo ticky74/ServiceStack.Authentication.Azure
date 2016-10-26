@@ -13,5 +13,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)AzureGraphAuthProviderTests.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GraphAuthServiceTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)OrmLiteApplicationRegistryServiceTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TestAzureGraphService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TokenHelper.cs" />
   </ItemGroup>
 </Project>

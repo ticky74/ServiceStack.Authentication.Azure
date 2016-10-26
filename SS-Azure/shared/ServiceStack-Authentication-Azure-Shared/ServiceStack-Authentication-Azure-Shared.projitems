@@ -14,6 +14,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)AzureAuthenticationProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)AzureGraphAuthService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)AzureGraphHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AzureGraphService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CodeApplicationRegistryService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MsGraph.cs" />
   </ItemGroup>
