@@ -162,6 +162,7 @@ namespace ServiceStack_Authentication_Azure_Tests_Shared
             {
                 UserName = "user@foodomain.com"
             };
+            var session = new AuthUserSession { State = "D79E5777-702E-4260-9A62-37F75FF22CCE", UserName = auth.UserName };
 
             subject.CallbackUrl = "http://localhost/myapp/";
                 var request = new MockHttpRequest("myapp", "GET", "text", "/myapp", new NameValueCollection {
@@ -177,8 +178,8 @@ namespace ServiceStack_Authentication_Azure_Tests_Shared
                     {
                         // To redeem an authorization code and get an access token,
                         // send an HTTP POST request to a common or tenant-specific Azure AD Authorization endpoint.
-                        Assert.Equal(tokenRequest.RequestUri.ToString(), 
-                            "https://login.microsoftonline.com/common/oauth2/token");
+                        Assert.Equal(tokenRequest.RequestUri.ToString(),
+                            "https://login.microsoftonline.com/common/oauth2/v2.0/token");
                         Assert.Equal(tokenRequest.Method, "POST");
                         Assert.Equal(tokenRequest.ContentType, "application/x-www-form-urlencoded");
                         // TODO: Test form data. Seems impossible: http://stackoverflow.com/questions/31630526/can-i-test-form-data-using-httpresultsfilter-callback
@@ -200,7 +201,6 @@ namespace ServiceStack_Authentication_Azure_Tests_Shared
                     }
                 })
                 {
-                    var session = new AuthUserSession { State = "D79E5777-702E-4260-9A62-37F75FF22CCE" };
 
                     var response = subject.Authenticate(mockAuthService.Object, session, auth);
                     Assert.True(session.IsAuthenticated);

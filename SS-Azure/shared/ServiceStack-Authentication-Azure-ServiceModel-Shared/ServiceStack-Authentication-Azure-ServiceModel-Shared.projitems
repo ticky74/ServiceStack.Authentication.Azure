@@ -10,6 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Entities\ApplicationRegistration.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\Me.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IApplicationRegistryService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Requests\RegisteredDomainCheck.cs" />
   </ItemGroup>

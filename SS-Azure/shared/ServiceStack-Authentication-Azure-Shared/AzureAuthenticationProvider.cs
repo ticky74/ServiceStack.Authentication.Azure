@@ -273,16 +273,13 @@ namespace ServiceStack.Authentication.Azure
             try
             {
                 var accessToken = authInfo["access_token"];
-                var me = "https://graph.microsoft.com/v1.0/me".GetStringFromUrl(
-                    requestFilter: req => { req.AddBearerToken(accessToken); });
 
-                var meInfo = JsonObject.Parse(me);
-                var meInfoNvc = meInfo.ToNameValueCollection();
-                tokens.FirstName = meInfoNvc["givenName"];
-                tokens.LastName = meInfoNvc["surname"];
-                tokens.Email = meInfoNvc["mail"];
-                tokens.Language = meInfoNvc["preferredLanguage"];
-                tokens.PhoneNumber = meInfoNvc["mobilePhone"];
+                var meData = GraphHelper.Me(accessToken);
+                tokens.FirstName = meData.FirstName;
+                tokens.LastName = meData.LastName;
+                tokens.Email = meData.Email;
+                tokens.Language = meData.Language;
+                tokens.PhoneNumber = meData.PhoneNumber;
 
                 var groups = GraphHelper.GetMemberGroups(accessToken);
                 tokens.Items["security-groups"] = (string) groups;
