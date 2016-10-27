@@ -13,5 +13,8 @@
     <releaseNotes></releaseNotes>
     <copyright>Copyright 2016</copyright>
     <tags>ServiceStack Authentication Azure</tags>
+    <dependencies>
+      <dependency id="ServiceStack.Interfaces" version="4.5.4" />
+    </dependencies>
   </metadata>
 </package>
