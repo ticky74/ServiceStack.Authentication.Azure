@@ -17,12 +17,18 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "ServiceStack-Authentication
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceStack.Authentication.Azure.OrmLite", "net46\ServiceStack.Authentication.Azure.OrmLite\ServiceStack.Authentication.Azure.OrmLite.csproj", "{0577A3CB-FAC3-4CCC-8EC2-9C9343D0B885}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceStack.Authentication.Azure.Tests", "net46\ServiceStack.Authentication.Azure.Tests\ServiceStack.Authentication.Azure.Tests.csproj", "{E32958B6-339B-4229-A0F9-90AC50061166}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "ServiceStack-Authentication-Azure-Tests-Shared", "shared\ServiceStack-Authentication-Azure-Tests-Shared\ServiceStack-Authentication-Azure-Tests-Shared.shproj", "{2A885A0A-E1EB-464F-BEB9-EC4CE0518ACC}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		shared\ServiceStack-Authentication-Azure-OrmLite\ServiceStack-Authentication-Azure-OrmLite.projitems*{0577a3cb-fac3-4ccc-8ec2-9c9343d0b885}*SharedItemsImports = 4
 		shared\ServiceStack-Authentication-Azure-OrmLite\ServiceStack-Authentication-Azure-OrmLite.projitems*{1b4695d7-bce1-4f92-97fb-ec80d34bdfd5}*SharedItemsImports = 13
 		shared\ServiceStack-Authentication-Azure-Shared\ServiceStack-Authentication-Azure-Shared.projitems*{1e2a97c3-542a-4ae6-bf09-4de26f01d935}*SharedItemsImports = 4
+		shared\ServiceStack-Authentication-Azure-Tests-Shared\ServiceStack-Authentication-Azure-Tests-Shared.projitems*{2a885a0a-e1eb-464f-beb9-ec4ce0518acc}*SharedItemsImports = 13
 		shared\ServiceStack-Authentication-Azure-Shared\ServiceStack-Authentication-Azure-Shared.projitems*{9e549d8a-4c7a-4983-b883-2ff0582e6bec}*SharedItemsImports = 13
+		shared\ServiceStack-Authentication-Azure-Tests-Shared\ServiceStack-Authentication-Azure-Tests-Shared.projitems*{e32958b6-339b-4229-a0f9-90ac50061166}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +47,10 @@ Global
 		{0577A3CB-FAC3-4CCC-8EC2-9C9343D0B885}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0577A3CB-FAC3-4CCC-8EC2-9C9343D0B885}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0577A3CB-FAC3-4CCC-8EC2-9C9343D0B885}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E32958B6-339B-4229-A0F9-90AC50061166}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E32958B6-339B-4229-A0F9-90AC50061166}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E32958B6-339B-4229-A0F9-90AC50061166}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E32958B6-339B-4229-A0F9-90AC50061166}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -51,5 +61,7 @@ Global
 		{9E549D8A-4C7A-4983-B883-2FF0582E6BEC} = {12838727-3770-49A8-83FE-C491D9275ECD}
 		{1B4695D7-BCE1-4F92-97FB-EC80D34BDFD5} = {12838727-3770-49A8-83FE-C491D9275ECD}
 		{0577A3CB-FAC3-4CCC-8EC2-9C9343D0B885} = {5C09199E-D1E6-4D38-AA89-746047693108}
+		{E32958B6-339B-4229-A0F9-90AC50061166} = {5C09199E-D1E6-4D38-AA89-746047693108}
+		{2A885A0A-E1EB-464F-BEB9-EC4CE0518ACC} = {12838727-3770-49A8-83FE-C491D9275ECD}
 	EndGlobalSection
 EndGlobal
