@@ -44,12 +44,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\ApplicationRegistration.cs" />
+    <Compile Include="Entities\Me.cs" />
+    <Compile Include="IApplicationRegistryService.cs" />
+    <Compile Include="IAzureGraphService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Requests\AuthCodeRequest.cs" />
+    <Compile Include="Requests\AuthTokenRequest.cs" />
+    <Compile Include="Requests\RegisteredDomainCheck.cs" />
+    <Compile Include="Requests\TokenResponse.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <Import Project="..\..\shared\ServiceStack-Authentication-Azure-ServiceModel-Shared\ServiceStack-Authentication-Azure-ServiceModel-Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

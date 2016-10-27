@@ -120,17 +120,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ServiceStack.Authentication.Azure.OrmLite\ServiceStack.Authentication.Azure.OrmLite.csproj">
-      <Project>{0577a3cb-fac3-4ccc-8ec2-9c9343d0b885}</Project>
-      <Name>ServiceStack.Authentication.Azure.OrmLite</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ServiceStack.Authentication.Azure.ServiceModel\ServiceStack.Authentication.Azure.ServiceModel.csproj">
       <Project>{b91645fc-98bd-4a2c-a123-587fb689f24d}</Project>
       <Name>ServiceStack.Authentication.Azure.ServiceModel</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ServiceStack.Authentication.Azure\ServiceStack.Authentication.Azure.csproj">
-      <Project>{1e2a97c3-542a-4ae6-bf09-4de26f01d935}</Project>
-      <Name>ServiceStack.Authentication.Azure</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="..\..\shared\ServiceStack-Authentication-Azure-Tests-Shared\ServiceStack-Authentication-Azure-Tests-Shared.projitems" Label="Shared" />
