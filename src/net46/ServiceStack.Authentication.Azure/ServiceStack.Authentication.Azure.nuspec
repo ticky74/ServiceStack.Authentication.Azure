@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>ServiceStack Azure Authentication Model Library</title>
+    <authors>ticky74</authors>
+    <owners>ticky74</owners>
+    <licenseUrl>https://github.com/ticky74/ServiceStack.Authentication.Azure/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/ticky74/ServiceStack.Authentication.Azure</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Azure authentication using Azure Graph and the 2.0 endpoints support for ServiceStack. Supports multi-tenant authorization through Azure.
+    This package includes the ServiceStack plugin and supporting services.</description>
+    <releaseNotes></releaseNotes>
+    <copyright>Copyright 2016</copyright>
+    <tags>ServiceStack Authentication Azure</tags>
+    <dependencies>
+      <dependency id="Microsoft.IdentityModel.Logging" version="1.0.0"/>
+      <dependency id="Microsoft.IdentityModel.Tokens" version="5.0.0" />
+      <dependency id="Newtonsoft.Json" version="9.0.1" />
+      <dependency id="ServiceStack" version="4.5.4" />
+      <dependency id="ServiceStack.Client" version="4.5.4"/>
+      <dependency id="ServiceStack.Common" version="4.5.4"/>
+      <dependency id="ServiceStack.Interfaces" version="4.5.4" />
+      <dependency id="ServiceStack.Text" version="4.5.4" />
+      <dependency id="System.IdentityModel.Tokens.Jwt" version="5.0.0"/>
+    </dependencies>
+  </metadata>
+</package>

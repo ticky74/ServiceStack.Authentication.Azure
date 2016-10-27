@@ -7,7 +7,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "net46", "net46", "{5C09199E
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceStack.Authentication.Azure.ServiceModel", "net46\ServiceStack.Authentication.Azure.ServiceModel\ServiceStack.Authentication.Azure.ServiceModel.csproj", "{B91645FC-98BD-4A2C-A123-587FB689F24D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceStack.Authentication.Azure", "net46\ServiceStack.Authentication.Azure\ServiceStack.Authentication.Azure.csproj", "{1E2A97C3-542A-4AE6-BF09-4DE26F01D935}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "shared", "shared", "{12838727-3770-49A8-83FE-C491D9275ECD}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "ServiceStack-Authentication-Azure-Shared", "shared\ServiceStack-Authentication-Azure-Shared\ServiceStack-Authentication-Azure-Shared.shproj", "{9E549D8A-4C7A-4983-B883-2FF0582E6BEC}"
+EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		shared\ServiceStack-Authentication-Azure-Shared\ServiceStack-Authentication-Azure-Shared.projitems*{1e2a97c3-542a-4ae6-bf09-4de26f01d935}*SharedItemsImports = 4
+		shared\ServiceStack-Authentication-Azure-Shared\ServiceStack-Authentication-Azure-Shared.projitems*{9e549d8a-4c7a-4983-b883-2ff0582e6bec}*SharedItemsImports = 13
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -17,11 +27,17 @@ Global
 		{B91645FC-98BD-4A2C-A123-587FB689F24D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B91645FC-98BD-4A2C-A123-587FB689F24D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B91645FC-98BD-4A2C-A123-587FB689F24D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E2A97C3-542A-4AE6-BF09-4DE26F01D935}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E2A97C3-542A-4AE6-BF09-4DE26F01D935}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E2A97C3-542A-4AE6-BF09-4DE26F01D935}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E2A97C3-542A-4AE6-BF09-4DE26F01D935}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{B91645FC-98BD-4A2C-A123-587FB689F24D} = {5C09199E-D1E6-4D38-AA89-746047693108}
+		{1E2A97C3-542A-4AE6-BF09-4DE26F01D935} = {5C09199E-D1E6-4D38-AA89-746047693108}
+		{9E549D8A-4C7A-4983-B883-2FF0582E6BEC} = {12838727-3770-49A8-83FE-C491D9275ECD}
 	EndGlobalSection
 EndGlobal
