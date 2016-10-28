@@ -13,7 +13,7 @@
     "projectUrl": "https://github.com/ticky74/ServiceStack.Authentication.Azure",
     "licenseUrl": "https://github.com/ticky74/ServiceStack.Authentication.Azure/blob/master/LICENSE"
   },
-  "version": "1.0.1-*",
+  "version": "1.0.1.*",
 
   "dependencies": {
     "System.Collections.Specialized": "4.0.1",
