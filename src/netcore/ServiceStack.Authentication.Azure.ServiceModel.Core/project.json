@@ -3,7 +3,7 @@
   "description": "Azure authentication using Azure Graph and the 2.0 endpoints support for ServiceStack. This package includes client models, request objects and interface declarations.",
   "title": "ServiceStack Azure Authentication Model Library",
   "language": "en-US",
-  "authors": ["ticky74"],
+  "authors": [ "ticky74" ],
   "packOptions": {
     "summary": "Azure authentication using Azure Graph and the 2.0 endpoints support for ServiceStack. This package includes client models, request objects and interface declarations.",
     "requireLicenseAcceptance": false,
@@ -13,7 +13,7 @@
     "projectUrl": "https://github.com/ticky74/ServiceStack.Authentication.Azure",
     "licenseUrl": "https://github.com/ticky74/ServiceStack.Authentication.Azure/blob/master/LICENSE"
   },
-  "version": "1.0.1",
+  "version": "1.0.1-*",
 
   "dependencies": {
     "System.Collections.Specialized": "4.0.1",

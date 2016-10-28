@@ -4,7 +4,7 @@
     <id>ServiceStack.Authentication.Azure.ServiceModel</id>
     <version>$version$</version>
     <title>ServiceStack Azure Authentication Model Library</title>
-    <authors>ticky74</authors>
+    <authors>ticky74</authors> 
     <owners>ticky74</owners>
     <licenseUrl>https://github.com/ticky74/ServiceStack.Authentication.Azure/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/ticky74/ServiceStack.Authentication.Azure</projectUrl>

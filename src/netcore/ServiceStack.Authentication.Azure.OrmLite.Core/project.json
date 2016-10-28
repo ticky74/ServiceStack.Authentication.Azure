@@ -3,7 +3,7 @@
   "description": "Azure authentication using Azure Graph and the 2.0 endpoints support for ServiceStack. This package includes OrmLite implementations of the required services to support multi-tenant Azure authentication in your ServiceStack app.",
   "title": "ServiceStack Azure Authentication Model Library",
   "language": "en-US",
-  "authors": ["ticky74"],
+  "authors": [ "ticky74" ],
   "packOptions": {
     "summary": "Azure authentication using Azure Graph and the 2.0 endpoints support for ServiceStack. This package includes OrmLite implementations of the required services to support multi-tenant Azure authentication in your ServiceStack app.",
     "requireLicenseAcceptance": false,
@@ -13,7 +13,7 @@
     "projectUrl": "https://github.com/ticky74/ServiceStack.Authentication.Azure",
     "licenseUrl": "https://github.com/ticky74/ServiceStack.Authentication.Azure/blob/master/LICENSE"
   },
-  "version": "1.0.1",
+  "version": "1.0.1-*",
 
   "dependencies": {
     "NETStandard.Library": "1.6.0",
