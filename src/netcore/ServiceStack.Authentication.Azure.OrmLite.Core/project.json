@@ -1,0 +1,31 @@
+{
+  "title": "ServiceStack.Authentication.Azure.OrmLite.Core",
+  "language": "en-US",
+  "version": "1.0.0-*",
+
+  "dependencies": {
+    "NETStandard.Library": "1.6.0",
+    "ServiceStack.Authentication.Azure.ServiceModel.Core": "1.0.0-*",
+    "System.Data.Common": "4.1.0"
+  },
+
+  "frameworks": {
+    "netstandard1.6": {
+      "imports": "dnxcore50",
+      "dependencies": {
+        "ServiceStack.Common.Core": "1.0.24",
+        "ServiceStack.OrmLite.Core": "1.0.23",
+        "ServiceStack.Text.Core": "1.0.24",
+        "ServiceStack.Interfaces.Core": "1.0.24"
+      }
+    },
+    "net462": {
+      "dependencies": {
+        "ServiceStack.Common": "4.5.4",
+        "ServiceStack.OrmLite": "4.5.4",
+        "ServiceStack.Text": "4.5.4",
+        "ServiceStack.Interfaces": "4.5.4"
+      }
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "title": "ServiceStack.Authentication.Azure.ServiceModel.Core",
+  "language": "en-US",
+  "version": "1.0.0-*",
+
+  "dependencies": {
+    "System.Collections.Specialized": "4.0.1",
+    "NETStandard.Library": "1.6.0"
+  },
+
+  "frameworks": {
+    "netstandard1.6": {
+      "imports": "dnxcore50",
+      "dependencies": {
+        "ServiceStack.Interfaces.Core": "1.0.24"
+      }
+    },
+    "net462": {
+      "dependencies": {
+        "ServiceStack.Interfaces": "4.5.4"
+      }
+    }
+  }
+}

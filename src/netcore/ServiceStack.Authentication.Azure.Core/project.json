@@ -1,0 +1,30 @@
+{
+  "title": "ServiceStack.Authentication.Azure.Core",
+  "language": "en-US",
+  "version": "1.0.0-*",
+
+  "dependencies": {
+    "System.Collections.Specialized": "4.0.1",
+    "Microsoft.IdentityModel.Logging": "1.0.0",
+    "Microsoft.IdentityModel.Tokens": "5.0.0",
+    "System.IdentityModel.Tokens.Jwt": "5.0.0",
+    "NETStandard.Library": "1.6.0",
+    "ServiceStack.Authentication.Azure.ServiceModel.Core": "1.0.0-*"
+  },
+
+  "frameworks": {
+    "netstandard1.6": {
+      "imports": "dnxcore50",
+      "dependencies": {
+        "ServiceStack.Core": "1.0.24",
+        "ServiceStack.Interfaces.Core": "1.0.24"
+      }
+    },
+    "net462": {
+      "dependencies": {
+        "ServiceStack": "4.5.4",
+        "ServiceStack.Interfaces": "4.5.4"
+      }
+    }
+  }
+}
