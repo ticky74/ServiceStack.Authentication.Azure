@@ -1,7 +1,19 @@
 {
-  "title": "ServiceStack.Authentication.Azure.Core",
+  "copyright": "Copyright 2016",
+  "description": "Azure authentication using Azure Graph and the 2.0 endpoints support for ServiceStack. Supports multi-tenant authorization through Azure. This package includes the ServiceStack plugin and supporting services.",
+  "title": "ServiceStack Azure Authentication Plugin",
   "language": "en-US",
-  "version": "1.0.0-*",
+  "authors": [ "ticky74" ],
+  "packOptions": {
+    "summary": "Azure authentication using Azure Graph and the 2.0 endpoints support for ServiceStack. Supports multi-tenant authorization through Azure. This package includes the ServiceStack plugin and supporting services.",
+    "requireLicenseAcceptance": false,
+    "tags": [ "ServiceStack", "Authentication", "Azure", "OrmLite" ],
+    "owners": [ "ticky74" ],
+    "repository": { "type:": "git" },
+    "projectUrl": "https://github.com/ticky74/ServiceStack.Authentication.Azure",
+    "licenseUrl": "https://github.com/ticky74/ServiceStack.Authentication.Azure/blob/master/LICENSE"
+  },
+  "version": "1.0.1",
 
   "dependencies": {
     "System.Collections.Specialized": "4.0.1",
@@ -9,7 +21,7 @@
     "Microsoft.IdentityModel.Tokens": "5.0.0",
     "System.IdentityModel.Tokens.Jwt": "5.0.0",
     "NETStandard.Library": "1.6.0",
-    "ServiceStack.Authentication.Azure.ServiceModel.Core": "1.0.0-*"
+    "ServiceStack.Authentication.Azure.ServiceModel.Core": "1.0.0",
   },
 
   "frameworks": {
