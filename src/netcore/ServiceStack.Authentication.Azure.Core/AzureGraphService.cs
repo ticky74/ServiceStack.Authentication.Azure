@@ -90,6 +90,7 @@ namespace ServiceStack.Authentication.Azure
 
             return new TokenResponse
             {
+                AuthData = authInfoNvc,
                 AccessToken = authInfo["access_token"],
                 RefreshToken = authInfo["refresh_token"]
             };
