@@ -21,7 +21,7 @@
     "Microsoft.IdentityModel.Tokens": "5.0.0",
     "System.IdentityModel.Tokens.Jwt": "5.0.0",
     "NETStandard.Library": "1.6.0",
-    "ServiceStack.Authentication.Azure.ServiceModel.Core": "1.0.0",
+    "ServiceStack.Authentication.Azure.ServiceModel.Core": "1.0.0"
   },
 
   "frameworks": {
