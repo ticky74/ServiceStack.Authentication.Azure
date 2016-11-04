@@ -139,6 +139,7 @@ namespace ServiceStack.Authentication.Azure
                         Scopes = Scopes
                     });
 
+                    
                     tokens.AccessTokenSecret = tokenResponse.AccessToken;
                     tokens.RefreshToken = tokenResponse.RefreshToken;
 

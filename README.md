@@ -14,16 +14,18 @@ similiar or unchanged. You will notice @jfoshee referenced throughout the source
 For the majority of you who aren't my Mom and are uninterested in reading my rambling, just 
 fire it up and follow the steps here.
 
-### Azure v2.0 Endpoint
+## Azure v2.0 Endpoint
 In a nutshell, Microsoft has converged the authentication scenarios of personal Microsoft 
 accounts and Azure Active Directory, 
 [tl;dr version](https://azure.microsoft.com/en-us/documentation/articles/active-directory-appmodel-v2-overview/). 
 My feeling is that this is a good thing, one API to rule them all. This is also why I whipped 
 up this project vs forking the original. In now way is one better than the other, they are 
 just different in my opinion ergo separate repo.
+That being said, I created this repo to authenticate users with Office365 and hybrid Azure 
+Active Directories.
 
 
-### Configuring Azure
+## Configuring Azure
 Before allowing users of your ServiceStack app to authenticate using the Azure Graph API
 you must first let Azure know about your app. This process is known as 'Registering your 
 App with Azure'. This process has been streamlined. It's easy.
@@ -32,5 +34,39 @@ App with Azure'. This process has been streamlined. It's easy.
 log in with your credentials. Remember to log in under the account that you wish to grant app 
 access to, either your microsoft account, or your directory (AAD/Office 365) account. In order 
 to grant access to your directory you will need sufficient permissions, likely god of gods.
-![alt text](docs/img/user-login.png "Logo Title Text 1") 
+![alt text](docs/img/user-login.png "Log in with your ms/office365 account.") 
 
+2. Once authenticated you will be on your 'My Applications' page. This page displays a list of 
+apps that you have already granted access too. Click the 'Add an app' button on the top
+ right.
+![alt text](docs/img/my-apps.png "Log in with your ms/office365 account.")
+
+3. You will be prompted to enter a name for your app. Enter the name of your 
+ServiceStack app. Like 'My New App'. You are then presented with the configuration screen for your app authentication.
+These are the items you care about:
+    1. Application Id: This is the value that uniquely identifies your application. You will need this value 
+    and will use it in your servicestack app.
+    
+    2. Application Secrets: You will need to generate a new password. BEWARE! This value is 
+    displayed to you only once. Once you dismiss it from your screen you will never see 
+    it again. When you are presented with this value make a note of it for later.
+    
+    3. Platforms: We are the web. Select the web platform. When you select the web platform 
+    you are then able to enter redirect Urls. Redirect Urls is the url that Azure 
+    will post back to once it has authenticated you user. It  should have the form of 
+    https://{yourservicestackapp}/auth/ms-graph. NOTE that https is a requirement which 
+    can be a pain. Good news is that .net core supports ssl certs really easily. If you 
+    need help google it or drop me a line and I can try help you out.
+
+    4. Microsoft Graph Permissions: This defines what things you are allowing your ServiceStack 
+    app to access. With the new api, a lot of things are openning up. For a good reference you 
+    can check out [https://azure.microsoft.com/en-us/documentation/articles/active-directory-v2-scopes/](https://azure.microsoft.com/en-us/documentation/articles/active-directory-v2-scopes/).
+![alt text](docs/img/app-registration.png "Log in with your ms/office365 account.")
+Thats about it! Azure is now expecting authentication requests from your app. Now the 
+next part of the solution is configuring your app.
+
+## Configuring ServiceStack Azure Authentication
+
+In order for your ServiceStack app to authenticate users against their directory, 
+we must inform Azure of sevof a couple pieces of data. These include your application id, 
+your password (or client secret) that you copied down earlier.

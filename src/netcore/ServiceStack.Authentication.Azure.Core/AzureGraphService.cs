@@ -46,11 +46,8 @@ namespace ServiceStack.Authentication.Azure
         public AuthCodeRequestData RequestAuthCode(AuthCodeRequest codeRequest)
         {
             var state = Guid.NewGuid().ToString("N");
-            //tokens.Items.Add("ClientId", registration.ClientId);
-            //userSession.State = state;
             var reqUrl =
                 $"{MsGraph.AuthorizationUrl}?client_id={codeRequest.Registration.ClientId}&response_type=code&redirect_uri={codeRequest.CallbackUrl.UrlEncode()}&domain_hint={codeRequest.UserName}&scope={BuildScopesFragment(codeRequest.Scopes)}&state={state}";
-            //authService.SaveSession(session, SessionExpiry);
             return new AuthCodeRequestData
             {
                 AuthCodeRequestUrl = reqUrl,
@@ -83,10 +80,6 @@ namespace ServiceStack.Authentication.Azure
             var authInfoNvc = authInfo.ToNameValueCollection();
             if (MsGraph.RespondedWithError(authInfoNvc))
                 throw new AzureServiceException(MsGraph.TokenUrl, authInfoNvc);
-
-//                return RedirectDueToFailure(authService, session, authInfoNvc);
-//            tokens.AccessTokenSecret = authInfo["access_token"];
-//            tokens.RefreshToken = authInfo["refresh_token"];
 
             return new TokenResponse
             {
