@@ -6,11 +6,11 @@ using ServiceStack.OrmLite;
 
 namespace ServiceStack.Authentication.Azure.OrmLite {
     
-    public class OrmLiteApplicationRegistryService : IApplicationRegistryService
+    public class OrmLiteMultiTenantApplicationRegistryService : IApplicationRegistryService
     {
         private readonly IDbConnectionFactory _connectionFactory;
 
-        public OrmLiteApplicationRegistryService(IDbConnectionFactory connectionFactory)
+        public OrmLiteMultiTenantApplicationRegistryService(IDbConnectionFactory connectionFactory)
         {
             _connectionFactory = connectionFactory;
         }

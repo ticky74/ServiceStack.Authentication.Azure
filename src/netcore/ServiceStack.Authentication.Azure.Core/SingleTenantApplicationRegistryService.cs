@@ -4,17 +4,17 @@ using ServiceStack.Configuration;
 
 namespace ServiceStack.Authentication.Azure
 {
-    public class AppSettingsApplicationRegistryService : IApplicationRegistryService
+    public class SingleTenantApplicationRegistryService : IApplicationRegistryService
     {
         private readonly ApplicationRegistration _registration;
 
-        public AppSettingsApplicationRegistryService(IAppSettings settings)
+        public SingleTenantApplicationRegistryService(AzureDirectorySettings settings)
         {
             _registration = new ApplicationRegistration
             {
-                ClientId = settings.GetString(ConfigSettings.GetClientIdKey()),
-                DirectoryName = settings.GetString(ConfigSettings.GetDirectoryNameKey()),
-                ClientSecret = settings.GetString(ConfigSettings.GetClientSecretKey())
+                ClientId = settings.ClientId,
+                DirectoryName = settings.DirectoryName,
+                ClientSecret = settings.ClientSecret
             };
         }
 

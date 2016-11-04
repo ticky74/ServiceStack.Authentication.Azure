@@ -20,10 +20,11 @@ namespace ServiceStack.Authentication.Azure
         private string _failureRedirectPath;
         private readonly IAzureGraphService _graphService;
 
+        public AzureGraphAuthenticationProvider()
+            : this(new AzureGraphService()) { }
+            
         public AzureGraphAuthenticationProvider(IAzureGraphService graphService)
-            : this(new AppSettings(), graphService)
-        {
-        }
+            : this(new AppSettings(), graphService) {}
 
         public AzureGraphAuthenticationProvider(IAppSettings settings, IAzureGraphService graphService)
             : base(settings, MsGraph.Realm, MsGraph.ProviderName, "ClientId", "ClientSecret")
