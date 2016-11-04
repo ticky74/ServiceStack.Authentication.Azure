@@ -152,7 +152,7 @@ username submitted with the Authenticate request.
 
 Already implemented is the OrmLiteMultiTenantApplicationRegistryService. This 
 implementation backs onto the existing OrmLite support built right into 
-ServiceStack and stores/queries directories in the database. 
+ServiceStack and looks up directories from the database. 
 
 ```
 
