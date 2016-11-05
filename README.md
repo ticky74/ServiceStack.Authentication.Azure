@@ -12,16 +12,15 @@ similiar or unchanged. You will notice @jfoshee referenced throughout the source
 
 ### Getting Started
 For the majority of you who aren't my Mom and are uninterested in reading my rambling, just 
-fire it up and follow the steps here.
+fire it up and follow the steps [here](https://github.com/ticky74/ServiceStack.Authentication.Azure/wiki/Get-Started).
 
 ## Azure v2.0 Endpoint
 In a nutshell, Microsoft has converged the authentication scenarios of personal Microsoft 
 accounts and Azure Active Directory, 
 [tl;dr version](https://azure.microsoft.com/en-us/documentation/articles/active-directory-appmodel-v2-overview/). 
 My feeling is that this is a good thing, one API to rule them all. This is also why I whipped 
-up this project vs forking the original. In now way is one better than the other, they are 
-just different in my opinion ergo separate repo.
-That being said, I created this repo to authenticate users with Office365 and hybrid Azure 
+up this project vs forking the original work authenticating with [AAD](https://github.com/jfoshee/ServiceStack.Authentication.Aad).
+I created this repo in order to make it trivial to authenticate users with Office365 and hybrid Azure 
 Active Directories.
 
 
