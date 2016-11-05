@@ -27,36 +27,12 @@
     "netstandard1.6": {
       "imports": "dnxcore50",
       "dependencies": {
-        "ServiceStack.Core": "1.0.24",
-        "System.Collections.Specialized": "4.0.1",
-        "ServiceStack.Interfaces.Core": "1.0.24"
-      }
-    },
-    "net451": {
-      "dependencies": {
-        "ServiceStack": "4.5.4",
-        "ServiceStack.Interfaces": "4.5.4"
-      }
-    },
-    "net460": {
-      "dependencies": {
-        "ServiceStack": "4.5.4",
-        "System.Collections.Specialized": "4.0.1",
-        "ServiceStack.Interfaces": "4.5.4"
-      }
-    },
-    "net461": {
-      "dependencies": {
-        "ServiceStack": "4.5.4",
-        "System.Collections.Specialized": "4.0.1",
-        "ServiceStack.Interfaces": "4.5.4"
-      }
-    },
-    "net462": {
-      "dependencies": {
-        "ServiceStack": "4.5.4",
-        "System.Collections.Specialized": "4.0.1",
-        "ServiceStack.Interfaces": "4.5.4"
+        "ServiceStack.Common.Core": "1.0.24",
+        "ServiceStack.OrmLite.Core": "1.0.24",
+        "ServiceStack.Text.Core": "1.0.24",
+        "ServiceStack.Interfaces.Core": "1.0.24",
+        "ServiceStack.Server.Core": "1.0.26",
+        "ServiceStack.Core": "1.0.26"
       }
     }
   }

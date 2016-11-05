@@ -26,29 +26,6 @@
         "System.Collections.Specialized": "4.0.1",
         "ServiceStack.Interfaces.Core": "1.0.24"
       }
-    },
-    "net451": {
-      "dependencies": {
-        "ServiceStack.Interfaces": "4.5.4"
-      }
-    },
-    "net460": {
-      "dependencies": {
-        "System.Collections.Specialized": "4.0.1",
-        "ServiceStack.Interfaces": "4.5.4"
-      }
-    },
-    "net461": {
-      "dependencies": {
-        "System.Collections.Specialized": "4.0.1",
-        "ServiceStack.Interfaces": "4.5.4"
-      }
-    },
-    "net462": {
-      "dependencies": {
-        "System.Collections.Specialized": "4.0.1",
-        "ServiceStack.Interfaces": "4.5.4"
-      }
     }
   }
 }

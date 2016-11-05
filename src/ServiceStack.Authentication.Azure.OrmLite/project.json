@@ -30,38 +30,6 @@
         "ServiceStack.Text.Core": "1.0.24",
         "ServiceStack.Interfaces.Core": "1.0.24"
       }
-    },
-    "net451": {
-      "dependencies": {
-        "ServiceStack.Common": "4.5.4",
-        "ServiceStack.OrmLite": "4.5.4",
-        "ServiceStack.Text": "4.5.4",
-        "ServiceStack.Interfaces": "4.5.4"
-      }
-    },
-    "net460": {
-      "dependencies": {
-        "ServiceStack.Common": "4.5.4",
-        "ServiceStack.OrmLite": "4.5.4",
-        "ServiceStack.Text": "4.5.4",
-        "ServiceStack.Interfaces": "4.5.4"
-      }
-    },
-    "net461": {
-      "dependencies": {
-        "ServiceStack.Common": "4.5.4",
-        "ServiceStack.OrmLite": "4.5.4",
-        "ServiceStack.Text": "4.5.4",
-        "ServiceStack.Interfaces": "4.5.4"
-      }
-    },
-    "net462": {
-      "dependencies": {
-        "ServiceStack.Common": "4.5.4",
-        "ServiceStack.OrmLite": "4.5.4",
-        "ServiceStack.Text": "4.5.4",
-        "ServiceStack.Interfaces": "4.5.4"
-      }
     }
   }
 }
