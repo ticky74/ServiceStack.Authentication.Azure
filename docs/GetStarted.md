@@ -28,13 +28,17 @@ container.Register<IApplicationRegistryService>(
 ...
 
 ```
-        b) Multi-Tenant
+        b) Multi-Tenant: Notice the call to InitSchema, this will initialize the necessary 
+        tables in your db to support storing authentication info for multiple directories.
 ```
 
 ...
 container.Register<IApplicationRegistryService>(
     c => new OrmLiteMultiTenantApplicationRegistryService(c.Resolve<IDbConnectionFactory>()));
+
 ...
+var registry = container.Resolve<IApplicationRegistryService>();
+registry.InitSchema();
 
 ```
 4. Post authentication requests to the /auth/ms-graph authentication provider and specify the 
