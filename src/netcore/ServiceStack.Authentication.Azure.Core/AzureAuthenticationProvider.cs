@@ -84,10 +84,6 @@ namespace ServiceStack.Authentication.Azure
                 return result;
             }
 
-            // 1. The client application starts the flow by redirecting the user agent 
-            //    to the Azure AD authorization endpoint. The user authenticates and 
-            //    consents, if consent is required.
-
             // TODO: Can State property be added to IAuthSession to avoid this cast
             var userSession = session as AuthUserSession;
             if (userSession == null)
@@ -103,13 +99,6 @@ namespace ServiceStack.Authentication.Azure
                 session.IsAuthenticated = false;
                 throw new UnauthorizedAccessException("Mismatched state in code response.");
             }
-
-            // 2. The Azure AD authorization endpoint redirects the user agent back 
-            //    to the client application with an authorization code. The user 
-            //    agent returns authorization code to the client application’s redirect URI.
-            // 3. The client application requests an access token from the 
-            //    Azure AD token issuance endpoint. It presents the authorization code 
-            //    to prove that the user has consented.
 
             return RequestAccessToken(authService, session, code, tokens);
         }

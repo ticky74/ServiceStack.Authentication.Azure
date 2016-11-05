@@ -206,7 +206,8 @@ namespace ServiceStack.Authentication.Azure
             });
             tokens.Items.Add("ClientId", registration.ClientId);
             userSession.State = codeRequestData.State;
-            authService.SaveSession(session, SessionExpiry);
+            this.SaveSession(authService, session, SessionExpiry);
+            //authService.SaveSession(session, SessionExpiry);
             return authService.Redirect(PreAuthUrlFilter(this, codeRequestData.AuthCodeRequestUrl));
         }
 
