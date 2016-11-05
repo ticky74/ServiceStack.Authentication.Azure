@@ -20,19 +20,27 @@
     "Microsoft.IdentityModel.Tokens": "5.0.0",
     "System.IdentityModel.Tokens.Jwt": "5.0.0",
     "NETStandard.Library": "1.6.0",
-    "ServiceStack.Authentication.Azure.ServiceModel": "1.0.3"
+    "ServiceStack.Authentication.Azure.ServiceModel": "1.0.3",
+    "ServiceStack.Common.Core": "1.0.24",
+    "ServiceStack.OrmLite.Core": "1.0.24",
+    "ServiceStack.Text.Core": "1.0.24",
+    "ServiceStack.Interfaces.Core": "1.0.24",
+    "ServiceStack.Server.Core": "1.0.24",
+    "ServiceStack.Core": "1.0.24"
   },
 
   "frameworks": {
     "netstandard1.6": {
       "imports": "dnxcore50",
       "dependencies": {
-        "ServiceStack.Common.Core": "1.0.24",
-        "ServiceStack.OrmLite.Core": "1.0.24",
-        "ServiceStack.Text.Core": "1.0.24",
-        "ServiceStack.Interfaces.Core": "1.0.24",
-        "ServiceStack.Server.Core": "1.0.26",
-        "ServiceStack.Core": "1.0.26"
+      }
+    },
+    "netcoreapp1.0": {
+      "dependencies": {
+        "Microsoft.NETCore.App": {
+          "type": "platform",
+          "version": "1.0.0"
+        }
       }
     }
   }

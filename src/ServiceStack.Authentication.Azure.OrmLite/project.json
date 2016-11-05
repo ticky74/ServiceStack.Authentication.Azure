@@ -18,17 +18,25 @@
   "dependencies": {
     "NETStandard.Library": "1.6.0",
     "ServiceStack.Authentication.Azure.ServiceModel": "1.0.3",
-    "System.Data.Common": "4.1.0"
+    "System.Data.Common": "4.1.0",
+    "ServiceStack.Common.Core": "1.0.24",
+    "ServiceStack.OrmLite.Core": "1.0.24",
+    "ServiceStack.Text.Core": "1.0.24",
+    "ServiceStack.Interfaces.Core": "1.0.24"
   },
 
   "frameworks": {
     "netstandard1.6": {
       "imports": "dnxcore50",
       "dependencies": {
-        "ServiceStack.Common.Core": "1.0.24",
-        "ServiceStack.OrmLite.Core": "1.0.24",
-        "ServiceStack.Text.Core": "1.0.24",
-        "ServiceStack.Interfaces.Core": "1.0.24"
+      }
+    },
+    "netcoreapp1.0": {
+      "dependencies": {
+        "Microsoft.NETCore.App": {
+          "type": "platform",
+          "version": "1.0.0"
+        }
       }
     }
   }
