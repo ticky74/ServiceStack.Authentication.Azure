@@ -20,6 +20,16 @@
   },
 
   "frameworks": {
+    "netcoreapp1.0": {
+      "dependencies": {
+        "Microsoft.NETCore.App": {
+          "type": "platform",
+          "version": "1.0.0"
+        },
+        "System.Collections.Specialized": "4.0.1",
+        "ServiceStack.Interfaces.Core": "1.0.24"
+      }
+    },
     "netstandard1.6": {
       "imports": "dnxcore50",
       "dependencies": {
