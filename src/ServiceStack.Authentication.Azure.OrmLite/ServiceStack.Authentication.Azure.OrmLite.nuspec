@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>ServiceStack.Authentication.Azure.OrmLite</id>
+    <version>$version$</version>
+    <title>ServiceStack Azure Authentication OrmLite Directory Persistence</title>
+    <authors>ticky74</authors>
+    <owners>ticky74</owners>
+    <licenseUrl>https://github.com/ticky74/ServiceStack.Authentication.Azure/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/ticky74/ServiceStack.Authentication.Azure</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>
+      For use with ServiceStack.Authentication.Azure multi-tenant feature. Uses OrmLite backend to store and
+      retrieve azure directory authentication information.
+    </description>
+    <releaseNotes></releaseNotes>
+    <copyright>Copyright 2016</copyright>
+    <tags>ServiceStack Authentication Azure</tags>
+    <dependencies>
+      <dependency id="ServiceStack.Authentication.Azure.ServiceModel" version="$version$" />
+    </dependencies>
+  </metadata>
+</package>
