@@ -14,7 +14,7 @@ using System.Text;
 
 namespace ServiceStack.Authentication.Azure
 {
-    public class AzureGraphAuthenticationProvider : OAuthProvider
+    public class AzureAuthenticationProvider : OAuthProvider
     {
         #region Constants and Variables
 
@@ -25,17 +25,17 @@ namespace ServiceStack.Authentication.Azure
 
         #region Constructors
 
-        public AzureGraphAuthenticationProvider()
+        public AzureAuthenticationProvider()
             : this(new AzureGraphService())
         {
         }
 
-        public AzureGraphAuthenticationProvider(IAzureGraphService graphService)
+        public AzureAuthenticationProvider(IAzureGraphService graphService)
             : this(new AppSettings(), graphService)
         {
         }
 
-        public AzureGraphAuthenticationProvider(IAppSettings settings, IAzureGraphService graphService)
+        public AzureAuthenticationProvider(IAppSettings settings, IAzureGraphService graphService)
             : base(settings, MsGraph.Realm, MsGraph.ProviderName, "ClientId", "ClientSecret")
         {
             // Default Scopes. Not sure if this is a bad idea @ticky74

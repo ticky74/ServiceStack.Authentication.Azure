@@ -35,7 +35,7 @@ namespace ServiceStack.Authentication.Azure20.Tests
                         new AuthFeature(() => new AuthUserSession(),
                             new IAuthProvider[]
                             {
-                                new AzureGraphAuthenticationProvider(new TestAzureGraphService())
+                                new AzureAuthenticationProvider(new TestAzureGraphService())
                             }));
 
                     var container = host.GetContainer();
@@ -95,7 +95,7 @@ namespace ServiceStack.Authentication.Azure20.Tests
         [Fact]
         public void ShouldBeAuthProvider()
         {
-            var subject = new AzureGraphAuthenticationProvider(new TestAzureGraphService());
+            var subject = new AzureAuthenticationProvider(new TestAzureGraphService());
             Assert.IsAssignableFrom<AuthProvider>(subject);
             Assert.Equal("ms-graph", subject.Provider);
         }
@@ -103,7 +103,7 @@ namespace ServiceStack.Authentication.Azure20.Tests
         [Fact]
         public void ShouldRequestCode()
         {
-            var subject = new AzureGraphAuthenticationProvider(new TestAzureGraphService());
+            var subject = new AzureAuthenticationProvider(new TestAzureGraphService());
             var auth = new Authenticate
             {
                 UserName = "some.user@foodomain.com"
@@ -127,7 +127,7 @@ namespace ServiceStack.Authentication.Azure20.Tests
         [Fact]
         public void ShouldSetCallbackUrlWithoutParameters()
         {
-            var subject = new AzureGraphAuthenticationProvider(new TestAzureGraphService());
+            var subject = new AzureAuthenticationProvider(new TestAzureGraphService());
             var auth = new Authenticate
             {
                 UserName = "some.user@foodomain.com"
@@ -154,7 +154,7 @@ namespace ServiceStack.Authentication.Azure20.Tests
         public void ShouldRedirectToFailurePathIfErrorIn()
         {
             // See https://tools.ietf.org/html/rfc6749#section-4.1.2.1
-            var subject = new AzureGraphAuthenticationProvider(new TestAzureGraphService())
+            var subject = new AzureAuthenticationProvider(new TestAzureGraphService())
             {
                 FailureRedirectPath = "/auth-failure"
             };
@@ -180,7 +180,7 @@ namespace ServiceStack.Authentication.Azure20.Tests
         [Fact]
         public void ShouldRequestToken()
         {
-            var subject = new AzureGraphAuthenticationProvider(new TestAzureGraphService());
+            var subject = new AzureAuthenticationProvider(new TestAzureGraphService());
             var auth = new Authenticate
             {
                 UserName = "some.user@foodomain.com"
@@ -236,7 +236,7 @@ namespace ServiceStack.Authentication.Azure20.Tests
         [Fact]
         public void ShouldSetReferrerFromRedirectParam()
         {
-            var subject = new AzureGraphAuthenticationProvider(new TestAzureGraphService());
+            var subject = new AzureAuthenticationProvider(new TestAzureGraphService());
             var auth = new Authenticate
             {
                 UserName = "some.user@foodomain.com"
@@ -257,7 +257,7 @@ namespace ServiceStack.Authentication.Azure20.Tests
         [Fact]
         public void ShouldNotAuthenticateIfDirectoryNameNotMatched()
         {
-            var subject = new AzureGraphAuthenticationProvider(new TestAzureGraphService());
+            var subject = new AzureAuthenticationProvider(new TestAzureGraphService());
             var auth = new Authenticate
             {
                 UserName = "some.user@foodomain.com"
@@ -295,7 +295,7 @@ namespace ServiceStack.Authentication.Azure20.Tests
         [Fact]
         public void ShouldSaveOAuth2StateValue()
         {
-            var subject = new AzureGraphAuthenticationProvider(new TestAzureGraphService());
+            var subject = new AzureAuthenticationProvider(new TestAzureGraphService());
             var auth = new Authenticate
             {
                 UserName = "some.user@foodomain.com"
@@ -315,7 +315,7 @@ namespace ServiceStack.Authentication.Azure20.Tests
         [Fact]
         public void ShouldAbortIfStateValuesDoNotMatch()
         {
-            var subject = new AzureGraphAuthenticationProvider(new TestAzureGraphService());
+            var subject = new AzureAuthenticationProvider(new TestAzureGraphService());
             var auth = new Authenticate
             {
                 UserName = "some.user@foodomain.com"
