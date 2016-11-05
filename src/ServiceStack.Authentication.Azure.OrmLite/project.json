@@ -1,0 +1,43 @@
+{
+  "copyright": "Copyright 2016",
+  "description": "Azure authentication using Azure Graph and the 2.0 endpoints support for ServiceStack. This package includes OrmLite implementations of the required services to support multi-tenant Azure authentication in your ServiceStack app.",
+  "title": "ServiceStack Azure Authentication Model Library",
+  "language": "en-US",
+  "authors": [ "ticky74" ],
+  "packOptions": {
+    "summary": "Azure authentication using Azure Graph and the 2.0 endpoints support for ServiceStack. This package includes OrmLite implementations of the required services to support multi-tenant Azure authentication in your ServiceStack app.",
+    "requireLicenseAcceptance": false,
+    "tags": [ "ServiceStack", "Authentication", "Azure", "OrmLite" ],
+    "owners": [ "ticky74" ],
+    "repository": { "type:": "git" },
+    "projectUrl": "https://github.com/ticky74/ServiceStack.Authentication.Azure",
+    "licenseUrl": "https://github.com/ticky74/ServiceStack.Authentication.Azure/blob/master/LICENSE"
+  },
+  "version": "1.0.3",
+
+  "dependencies": {
+    "NETStandard.Library": "1.6.0",
+    "ServiceStack.Authentication.Azure.ServiceModel": "1.0.3",
+    "System.Data.Common": "4.1.0"
+  },
+
+  "frameworks": {
+    "netstandard1.6": {
+      "imports": "dnxcore50",
+      "dependencies": {
+        "ServiceStack.Common.Core": "1.0.24",
+        "ServiceStack.OrmLite.Core": "1.0.23",
+        "ServiceStack.Text.Core": "1.0.24",
+        "ServiceStack.Interfaces.Core": "1.0.24"
+      }
+    },
+    "net462": {
+      "dependencies": {
+        "ServiceStack.Common": "4.5.4",
+        "ServiceStack.OrmLite": "4.5.4",
+        "ServiceStack.Text": "4.5.4",
+        "ServiceStack.Interfaces": "4.5.4"
+      }
+    }
+  }
+}

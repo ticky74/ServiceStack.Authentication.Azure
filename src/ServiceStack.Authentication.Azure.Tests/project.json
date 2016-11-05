@@ -1,0 +1,34 @@
+{
+  "version": "1.0.0-*",
+  "testRunner": "xunit",
+  "dependencies": {
+    "xunit": "2.2.0-beta2-build3300",
+    "ServiceStack.Authentication.Azure.ServiceModel": "1.0.3",
+    "ServiceStack.Authentication.Azure.OrmLite": "1.0.3",
+    "ServiceStack.Authentication.Azure": "1.0.3",
+    "Moq": "4.6.38-alpha",
+    "dotnet-test-xunit": "2.2.0-preview2-build1029"
+  },
+  "frameworks": {
+    "netcoreapp1.0": {
+      "dependencies": {
+        "Microsoft.NETCore.App": {
+          "type": "platform",
+          "version": "1.0.0"
+        },
+        "ServiceStack.Server.Core": "1.0.26",
+        "ServiceStack.OrmLite.Sqlite.Core": "1.0.26",
+        "ServiceStack.OrmLite.Core": "1.0.26",
+        "ServiceStack.Common.Core": "1.0.26"
+      }
+    },
+    "net462": {
+      "dependencies": {
+        "ServiceStack.Server": "4.5.4",
+        "ServiceStack.OrmLite.Sqlite.Windows": "4.5.4",
+        "ServiceStack.OrmLite": "4.5.4",
+        "ServiceStack.Common": "4.5.4"
+      }
+    } 
+  }
+}
