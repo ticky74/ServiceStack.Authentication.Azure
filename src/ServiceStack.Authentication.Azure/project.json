@@ -24,18 +24,6 @@
   },
 
   "frameworks": {
-    "netcoreapp1.0": {
-      "dependencies": {
-        "Microsoft.NETCore.App": {
-          "type": "platform",
-          "version": "1.0.0"
-        },
-        "ServiceStack.Server.Core": "1.0.26",
-        "ServiceStack.OrmLite.Sqlite.Core": "1.0.26",
-        "ServiceStack.OrmLite.Core": "1.0.26",
-        "ServiceStack.Common.Core": "1.0.26"
-      }
-    },
     "netstandard1.6": {
       "imports": "dnxcore50",
       "dependencies": {

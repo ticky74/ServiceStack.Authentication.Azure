@@ -172,3 +172,5 @@ autoFac.Register<IApplicationRegistryService>(
 
 ...
 ```
+
+Any questions, comments, complaints drop me a line <ikulmatycki@gmail.com>
