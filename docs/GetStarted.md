@@ -8,7 +8,7 @@ app.Plugins.Add(
     new AuthFeature(() => new AuthUserSession(), 
     new IAuthProvider[]
     {
-        new AzureGraphAuthenticationProvider(), 
+        new AzureAuthenticationProvider(), 
     }));
 ...
 ```

@@ -91,7 +91,7 @@ app.Plugins.Add(
     new AuthFeature(() => new AuthUserSession(), 
     new IAuthProvider[]
     {
-        new AzureGraphAuthenticationProvider(), 
+        new AzureAuthenticationProvider(), 
     }));
 ...
 
@@ -160,7 +160,7 @@ app.Plugins.Add(
     new AuthFeature(() => new AuthUserSession(), 
     new IAuthProvider[]
     {
-        new AzureGraphAuthenticationProvider(new TestAzureGraphService()), 
+        new AzureAuthenticationProvider(), 
     }));
 
 var container = host.GetContainer();
