@@ -17,7 +17,7 @@
     <copyright>Copyright 2016</copyright>
     <tags>ServiceStack Authentication Azure</tags>
     <dependencies>
-      <dependency id="ServiceStack.Authentication.Azure" version="$version$" />
+      <dependency id="ServiceStack.Authentication.Azure.ServiceModel" version="$version$" />
     </dependencies>
   </metadata>
 </package>
