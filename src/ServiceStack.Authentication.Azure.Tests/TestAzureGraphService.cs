@@ -16,6 +16,13 @@ namespace ServiceStack.Authentication.Azure20.Tests
             {"id_token", TokenHelper.IdToken}
         };
 
+        private readonly Me _me;
+
+        public TestAzureGraphService(Me me = null)
+        {
+            _me = me;
+        }
+
         #endregion
 
         #region IAzureGraphService Members
@@ -28,7 +35,7 @@ namespace ServiceStack.Authentication.Azure20.Tests
 
         public Me Me(string authToken)
         {
-            return new Me
+            return _me ?? new Me
             {
                 Email = "some.user@foodomain.com",
                 FirstName = "Some",

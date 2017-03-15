@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Kode4 Studios")]
 [assembly: AssemblyProduct("ServiceStack.Authentication.Azure.OrmLite.Core")]
 [assembly: AssemblyTrademark("")]
 

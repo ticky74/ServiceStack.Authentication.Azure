@@ -55,3 +55,7 @@ var auth = new Authenticate {
 ```
 
 That's all!
+
+## Other Options
+
+1. [Custom Login Experience](./ConfigureLoginExperiences.md)

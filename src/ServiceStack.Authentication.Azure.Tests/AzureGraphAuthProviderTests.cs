@@ -1,19 +1,20 @@
 ﻿using System;
 using System.Collections.Specialized;
 using System.IO;
+using System.Linq;
 using Moq;
 using ServiceStack.Auth;
-using ServiceStack.Authentication.Azure;
 using ServiceStack.Authentication.Azure.OrmLite;
 using ServiceStack.Authentication.Azure.ServiceModel;
 using ServiceStack.Authentication.Azure.ServiceModel.Entities;
+using ServiceStack.Authentication.Azure20.Tests;
 using ServiceStack.Data;
 using ServiceStack.OrmLite;
 using ServiceStack.Testing;
 using ServiceStack.Web;
 using Xunit;
 
-namespace ServiceStack.Authentication.Azure20.Tests
+namespace ServiceStack.Authentication.Azure.Tests
 {
     public class AzureGraphAuthProviderTests : IDisposable
     {
@@ -100,6 +101,55 @@ namespace ServiceStack.Authentication.Azure20.Tests
             Assert.Equal("ms-graph", subject.Provider);
         }
 
+        [Theory]
+        [InlineData("custom-clientid", "custom-clientsecret", "custom-foodomain.com", null)]
+        [InlineData("custom-clientid", "custom-clientsecret", "custom-foodomain.com", "joe@custom-foodomain.com")]
+        public void ShouldRequestCodeWithCustomDirectoryResolver(string clientId, string clientSecret
+            , string directoryName, string username)
+        {
+            var directory = new ApplicationRegistration
+            {
+                ClientId = clientId,
+                ClientSecret = clientSecret,
+                DirectoryName = directoryName
+            };
+
+            var subject = new AzureAuthenticationProvider(new TestAzureGraphService())
+            {
+                ApplicationDirectoryResolver = (serviceBase, registryService, session) => directory
+            };
+
+            var auth = new Authenticate()
+            {
+                UserName = username
+            };
+
+            var authService = MockAuthService();
+            var response = subject.Authenticate(authService.Object, new AuthUserSession(), auth);
+
+            var result = (IHttpResult)response;
+            if (string.IsNullOrWhiteSpace(username))
+            {
+                Assert.True(result.Headers["Location"].StartsWith(
+                    $"https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id={clientId}&response_type=code&redirect_uri=http%3a%2f%2flocalhost%2f&scope=https%3a%2f%2fgraph.microsoft.com%2fUser.Read++https%3a%2f%2fgraph.microsoft.com%2foffline%5faccess++https%3a%2f%2fgraph.microsoft.com%2fopenid++https%3a%2f%2fgraph.microsoft.com%2fprofile"));
+            }
+            else
+            {
+                Assert.True(result.Headers["Location"].StartsWith(
+                    $"https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id={clientId}&response_type=code&redirect_uri=http%3a%2f%2flocalhost%2f&domain_hint={username}&scope=https%3a%2f%2fgraph.microsoft.com%2fUser.Read++https%3a%2f%2fgraph.microsoft.com%2foffline%5faccess++https%3a%2f%2fgraph.microsoft.com%2fopenid++https%3a%2f%2fgraph.microsoft.com%2fprofile"));
+            }
+
+            var codeRequest = new Uri(result.Headers["Location"]);
+            var query = PclExportClient.Instance.ParseQueryString(codeRequest.Query);
+            if (!string.IsNullOrWhiteSpace(username))
+            {
+                Assert.Equal(username, query["domain_hint"]);
+            }
+            Assert.Equal(query["response_type"], "code");
+            Assert.Equal(query["client_id"], clientId);
+            Assert.Equal(query["redirect_uri"].UrlDecode(), subject.CallbackUrl);
+        }
+
         [Fact]
         public void ShouldRequestCode()
         {
@@ -175,6 +225,73 @@ namespace ServiceStack.Authentication.Azure20.Tests
                 result.Headers["Location"]);
             var query = PclExportClient.Instance.ParseQueryString(new Uri(result.Headers["Location"]).Query);
             Assert.Equal("code", query["response_type"]);
+        }
+
+        [Theory]
+        [InlineData("joe@custom-foodomain.com")]
+        [InlineData(null)]
+        public void ShouldRequestTokenWithCustomDirectoryResolver(string username)
+        {
+            var directory = new ApplicationRegistration
+            {
+                ClientId = "custom-clientid",
+                ClientSecret = "custom-clientsecret",
+                DirectoryName = "custom-foodomain.com"
+            };
+            var auth = new Authenticate {UserName = username};
+
+            var subject = new AzureAuthenticationProvider(new TestAzureGraphService())
+            {
+                ApplicationDirectoryResolver = (serviceBase, registryService, s) => directory
+            };
+
+            var session = new AuthUserSession { State = "D79E5777-702E-4260-9A62-37F75FF22CCE", UserName = auth.UserName };
+
+            subject.CallbackUrl = "http://localhost/myapp/";
+            var request = new MockHttpRequest("myapp", "GET", "text", "/myapp", new NameValueCollection
+            {
+                {
+                    "code",
+                    "AwABAAAAvPM1KaPlrEqdFSBzjqfTGBCmLdgfSTLEMPGYuNHSUYBrqqf_ZT_p5uEAEJJ_nZ3UmphWygRNy2C3jJ239gV_DBnZ2syeg95Ki-374WHUP-i3yIhv5i-7KU2CEoPXwURQp6IVYMw-DjAOzn7C3JCu5wpngXmbZKtJdWmiBzHpcO2aICJPu1KvJrDLDP20chJBXzVYJtkfjviLNNW7l7Y3ydcHDsBRKZc3GuMQanmcghXPyoDg41g8XbwPudVh7uCmUponBQpIhbuffFP_tbV8SNzsPoFz9CLpBCZagJVXeqWoYMPe2dSsPiLO9Alf_YIe5zpi-zY4C3aLw5g9at35eZTfNd0gBRpR5ojkMIcZZ6IgAA"
+                },
+                {"session_state", "7B29111D-C220-4263-99AB-6F6E135D75EF"},
+                {"state", "D79E5777-702E-4260-9A62-37F75FF22CCE"}
+            }, Stream.Null, null);
+
+            var mockAuthService = MockAuthService(request);
+            using (new HttpResultsFilter
+            {
+                StringResultFn = (tokenRequest, s) =>
+                {
+                    Assert.Equal(tokenRequest.RequestUri.ToString(),
+                        "https://login.microsoftonline.com/common/oauth2/v2.0/token");
+                    Assert.Equal(tokenRequest.Method, "POST");
+                    Assert.Equal(tokenRequest.ContentType, "application/x-www-form-urlencoded");
+                    return TokenHelper.GetIdToken();
+                }
+            })
+            {
+                var response = subject.Authenticate(mockAuthService.Object, session, auth);
+                Assert.True(session.IsAuthenticated);
+                var tokens = session.GetAuthTokens("ms-graph");
+                Assert.NotNull(tokens);
+                Assert.Equal(tokens.Provider, "ms-graph");
+                Assert.Equal(tokens.AccessTokenSecret, TokenHelper.AccessToken);
+                Assert.NotNull(tokens.RefreshTokenExpiry);
+                Assert.Equal(tokens.RefreshToken, TokenHelper.RefreshToken);
+
+                // Regardless of what is entered up front, Azure will determine what the identity values are
+                Assert.Equal(tokens.UserId, "d542096aa0b94e2195856b57e43257e4"); // oid
+                Assert.Equal(tokens.UserName, "some.user@foodomain.com");
+                Assert.Equal(tokens.DisplayName, "Some User");
+                Assert.Equal(session.UserName, tokens.UserName);
+                Assert.Equal(session.LastName, tokens.LastName);
+                Assert.Equal(session.FirstName, tokens.FirstName);
+                Assert.Equal(session.DisplayName, tokens.DisplayName);
+
+                var result = (IHttpResult)response;
+                Assert.True(result.Headers["Location"].StartsWith("http://localhost#s=1"));
+            }
         }
 
         [Fact]

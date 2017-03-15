@@ -57,8 +57,11 @@ namespace ServiceStack.Authentication.Azure
         public AuthCodeRequestData RequestAuthCode(AuthCodeRequest codeRequest)
         {
             var state = Guid.NewGuid().ToString("N");
+            var domainHint = string.IsNullOrWhiteSpace(codeRequest.UserName)
+                ? ""
+                : $"&domain_hint={codeRequest.UserName}";
             var reqUrl =
-                $"{MsGraph.AuthorizationUrl}?client_id={codeRequest.Registration.ClientId}&response_type=code&redirect_uri={codeRequest.CallbackUrl.UrlEncode()}&domain_hint={codeRequest.UserName}&scope={BuildScopesFragment(codeRequest.Scopes)}&state={state}";
+                $"{MsGraph.AuthorizationUrl}?client_id={codeRequest.Registration.ClientId}&response_type=code&redirect_uri={codeRequest.CallbackUrl.UrlEncode()}{domainHint}&scope={BuildScopesFragment(codeRequest.Scopes)}&state={state}";
             return new AuthCodeRequestData
             {
                 AuthCodeRequestUrl = reqUrl,

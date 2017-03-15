@@ -71,7 +71,7 @@ namespace ServiceStack.Authentication.Azure
         public string[] Scopes { get; set; }
 
         public Func<IServiceBase, IApplicationRegistryService, IAuthSession, ApplicationRegistration>
-            OnApplicationRegistrationRequired { get; set; } =
+            ApplicationDirectoryResolver { get; set; } =
             (serviceBase, registryService, authSession) =>
             {
                 var directoryName = GetDirectoryNameFromUsername(authSession.UserName);
@@ -185,7 +185,7 @@ namespace ServiceStack.Authentication.Azure
                     throw new InvalidOperationException(
                         $"No {nameof(IApplicationRegistryService)} found registered in AppHost.");
 
-                var registration = OnApplicationRegistrationRequired(authService, appRegistry, session);
+                var registration = ApplicationDirectoryResolver(authService, appRegistry, session);
                 if (registration == null)
                     throw new UnauthorizedAccessException($"Authorization for directory failed.");
 
@@ -238,7 +238,7 @@ namespace ServiceStack.Authentication.Azure
                     $"No {nameof(IApplicationRegistryService)} found registered in AppHost.");
 
             session.UserName = request.UserName;
-            var registration = OnApplicationRegistrationRequired(authService, appRegistry, session);
+            var registration = ApplicationDirectoryResolver(authService, appRegistry, session);
             if (registration == null)
                 throw new UnauthorizedAccessException($"Authorization for directory failed.");
 
