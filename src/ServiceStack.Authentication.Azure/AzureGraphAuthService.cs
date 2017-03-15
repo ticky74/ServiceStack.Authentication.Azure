@@ -1,27 +1,13 @@
+using System;
 using System.Net;
 using System.Text.RegularExpressions;
 using ServiceStack.Authentication.Azure.ServiceModel;
 using ServiceStack.Authentication.Azure.ServiceModel.Requests;
-using System;
 
 namespace ServiceStack.Authentication.Azure
 {
     public class GraphAuthService : Service
     {
-        #region Constants and Variables
-
-        private readonly IApplicationRegistryService _registry;
-
-        public const string DomainPattern =
-            @"^([a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+([a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,6}$";
-
-        public const string EmailPattern = @"\s*\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*\s*";
-
-        private static readonly Regex EmailRegex = new Regex(EmailPattern, RegexOptions.Compiled);
-        private static readonly Regex DomainRegex = new Regex(DomainPattern, RegexOptions.Compiled);
-
-        #endregion
-
         #region Constructors
 
         public GraphAuthService(IApplicationRegistryService registry)
@@ -49,6 +35,20 @@ namespace ServiceStack.Authentication.Azure
                 IsRegistered = isRegistered
             };
         }
+
+        #endregion
+
+        #region Constants and Variables
+
+        private readonly IApplicationRegistryService _registry;
+
+        public const string DomainPattern =
+            @"^([a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+([a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,6}$";
+
+        public const string EmailPattern = @"\s*\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*\s*";
+
+        private static readonly Regex EmailRegex = new Regex(EmailPattern, RegexOptions.Compiled);
+        private static readonly Regex DomainRegex = new Regex(DomainPattern, RegexOptions.Compiled);
 
         #endregion
     }

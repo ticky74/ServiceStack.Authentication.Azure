@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Azure authentication using Azure Graph and the 2.0 endpoints support for ServiceStack. Supports multi-tenant authorization through Azure. This package includes the ServiceStack plugin and supporting services.</Description>
+    <Copyright>Copyright 2016</Copyright>
+    <AssemblyTitle>ServiceStack Azure Authentication Plugin</AssemblyTitle>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <VersionPrefix>1.0.3</VersionPrefix>
+    <Authors>ticky74</Authors>
+    <TargetFrameworks>netstandard1.6;netcoreapp1.0</TargetFrameworks>
+    <AssemblyName>ServiceStack.Authentication.Azure</AssemblyName>
+    <PackageId>ServiceStack.Authentication.Azure</PackageId>
+    <PackageTags>ServiceStack;Authentication;Azure;OrmLite</PackageTags>
+    <PackageProjectUrl>https://github.com/ticky74/ServiceStack.Authentication.Azure</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/ticky74/ServiceStack.Authentication.Azure/blob/master/LICENSE</PackageLicenseUrl>
+    <NetStandardImplicitPackageVersion>1.6.0</NetStandardImplicitPackageVersion>
+    <PackageTargetFallback Condition=" '$(TargetFramework)' == 'netstandard1.6' ">$(PackageTargetFallback);dnxcore50</PackageTargetFallback>
+    <RuntimeFrameworkVersion Condition=" '$(TargetFramework)' == 'netcoreapp1.0' ">1.0.4</RuntimeFrameworkVersion>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ServiceStack.Authentication.Azure.ServiceModel\ServiceStack.Authentication.Azure.ServiceModel.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.IdentityModel.Logging" Version="1.0.0" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="5.0.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.0.0" />
+    <PackageReference Include="ServiceStack.Common.Core" Version="1.0.24" />
+    <PackageReference Include="ServiceStack.OrmLite.Core" Version="1.0.24" />
+    <PackageReference Include="ServiceStack.Text.Core" Version="1.0.24" />
+    <PackageReference Include="ServiceStack.Interfaces.Core" Version="1.0.24" />
+    <PackageReference Include="ServiceStack.Server.Core" Version="1.0.24" />
+    <PackageReference Include="ServiceStack.Core" Version="1.0.24" />
+  </ItemGroup>
+
+</Project>

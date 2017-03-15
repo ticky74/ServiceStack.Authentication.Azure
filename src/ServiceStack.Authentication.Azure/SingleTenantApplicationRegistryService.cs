@@ -1,5 +1,4 @@
 using System;
-using ServiceStack.Authentication.Azure;
 using ServiceStack.Authentication.Azure.ServiceModel;
 using ServiceStack.Authentication.Azure.ServiceModel.Entities;
 
@@ -7,38 +6,6 @@ namespace ServiceStack.Authentication.Azure
 {
     public class SingleTenantApplicationRegistryService : IApplicationRegistryService
     {
-        #region  Abstract
-
-        internal static class ConfigSettings
-        {
-            #region Constants and Variables
-
-            public const string ClientId = "oauth.{0}.clientId";
-            public const string ClientSecret = "oauth.{0}.clientSecret";
-            public const string DirectoryName = "oauth.{0}.directoryName";
-
-            #endregion
-
-            #region Public/Internal
-
-            public static string GetClientIdKey() => GetConfigKey(ClientId);
-            public static string GetClientSecretKey() => GetConfigKey(ClientSecret);
-            public static string GetDirectoryNameKey() => GetConfigKey(DirectoryName);
-
-            #endregion
-
-            #region Private
-
-            private static string GetConfigKey(string keyFormat)
-            {
-                return keyFormat.Fmt(MsGraph.ProviderName);
-            }
-
-            #endregion
-        }
-
-        #endregion
-
         #region Constants and Variables
 
         private readonly ApplicationRegistration _registration;
@@ -55,6 +22,38 @@ namespace ServiceStack.Authentication.Azure
                 DirectoryName = settings.DirectoryName,
                 ClientSecret = settings.ClientSecret
             };
+        }
+
+        #endregion
+
+        #region  Abstract
+
+        internal static class ConfigSettings
+        {
+            #region Private
+
+            private static string GetConfigKey(string keyFormat)
+            {
+                return keyFormat.Fmt(MsGraph.ProviderName);
+            }
+
+            #endregion
+
+            #region Constants and Variables
+
+            public const string ClientId = "oauth.{0}.clientId";
+            public const string ClientSecret = "oauth.{0}.clientSecret";
+            public const string DirectoryName = "oauth.{0}.directoryName";
+
+            #endregion
+
+            #region Public/Internal
+
+            public static string GetClientIdKey() => GetConfigKey(ClientId);
+            public static string GetClientSecretKey() => GetConfigKey(ClientSecret);
+            public static string GetDirectoryNameKey() => GetConfigKey(DirectoryName);
+
+            #endregion
         }
 
         #endregion

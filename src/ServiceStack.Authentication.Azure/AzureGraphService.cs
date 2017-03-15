@@ -1,21 +1,31 @@
+using System;
+using System.Linq;
 using ServiceStack.Authentication.Azure.ServiceModel;
 using ServiceStack.Authentication.Azure.ServiceModel.Entities;
 using ServiceStack.Authentication.Azure.ServiceModel.Requests;
 using ServiceStack.Text;
-using System;
-using System.Linq;
 
 namespace ServiceStack.Authentication.Azure
 {
     public class AzureGraphService : IAzureGraphService
     {
+        #region Private
+
+        private string BuildScopesFragment(string[] scopes)
+        {
+            return scopes.Select(
+                scope => $"{MsGraph.GraphUrl}/{scope} ").Join(" ").UrlEncode();
+        }
+
+        #endregion
+
         #region Public/Internal
 
         public string[] GetMemberGroups(string authToken)
         {
             var groups =
                 MsGraph.ActiveDirectory.MemberGroupsUrl.PostJsonToUrl("{securityEnabledOnly:false}",
-                    requestFilter: req =>
+                    req =>
                     {
                         req.AddBearerToken(authToken);
                         req.ContentType = "application/json";
@@ -88,16 +98,6 @@ namespace ServiceStack.Authentication.Azure
                 AccessToken = authInfo["access_token"],
                 RefreshToken = authInfo["refresh_token"]
             };
-        }
-
-        #endregion
-
-        #region Private
-
-        private string BuildScopesFragment(string[] scopes)
-        {
-            return scopes.Select(
-                scope => $"{MsGraph.GraphUrl}/{scope} ").Join(" ").UrlEncode();
         }
 
         #endregion

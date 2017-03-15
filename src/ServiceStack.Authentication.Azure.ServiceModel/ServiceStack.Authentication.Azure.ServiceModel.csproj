@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Azure authentication using Azure Graph and the 2.0 endpoints support for ServiceStack. This package includes client models, request objects and interface declarations.</Description>
+    <Copyright>Copyright 2016</Copyright>
+    <AssemblyTitle>ServiceStack Azure Authentication Model Library</AssemblyTitle>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <VersionPrefix>1.0.3</VersionPrefix>
+    <Authors>ticky74</Authors>
+    <TargetFrameworks>netstandard1.6;netcoreapp1.0</TargetFrameworks>
+    <AssemblyName>ServiceStack.Authentication.Azure.ServiceModel</AssemblyName>
+    <PackageId>ServiceStack.Authentication.Azure.ServiceModel</PackageId>
+    <PackageTags>ServiceStack;Authentication;Azure</PackageTags>
+    <PackageProjectUrl>https://github.com/ticky74/ServiceStack.Authentication.Azure</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/ticky74/ServiceStack.Authentication.Azure/blob/master/LICENSE</PackageLicenseUrl>
+    <NetStandardImplicitPackageVersion>1.6.0</NetStandardImplicitPackageVersion>
+    <PackageTargetFallback Condition=" '$(TargetFramework)' == 'netstandard1.6' ">$(PackageTargetFallback);dnxcore50</PackageTargetFallback>
+    <RuntimeFrameworkVersion Condition=" '$(TargetFramework)' == 'netcoreapp1.0' ">1.0.4</RuntimeFrameworkVersion>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ServiceStack.Interfaces.Core" Version="1.0.24" />
+    <PackageReference Include="System.Collections.Specialized" Version="4.0.1" />
+  </ItemGroup>
+
+</Project>

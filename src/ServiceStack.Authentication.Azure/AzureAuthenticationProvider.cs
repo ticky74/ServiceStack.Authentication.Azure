@@ -1,16 +1,17 @@
 ﻿using System;
-using System.Linq;
+using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Net;
+using System.Text;
 using ServiceStack.Auth;
 using ServiceStack.Authentication.Azure.ServiceModel;
+using ServiceStack.Authentication.Azure.ServiceModel.Entities;
 using ServiceStack.Authentication.Azure.ServiceModel.Requests;
 using ServiceStack.Configuration;
 using ServiceStack.Text;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Net;
 using ServiceStack.Web;
-using System.Text;
 
 namespace ServiceStack.Authentication.Azure
 {
@@ -69,6 +70,14 @@ namespace ServiceStack.Authentication.Azure
         // http://graph.microsoft.io/en-us/docs/authorization/permission_scopes
         public string[] Scopes { get; set; }
 
+        public Func<IServiceBase, IApplicationRegistryService, IAuthSession, ApplicationRegistration>
+            OnApplicationRegistrationRequired { get; set; } =
+            (serviceBase, registryService, authSession) =>
+            {
+                var directoryName = GetDirectoryNameFromUsername(authSession.UserName);
+                return registryService.GetApplicationByDirectoryName(directoryName);
+            };
+
         #endregion
 
         #region Public/Internal
@@ -77,10 +86,6 @@ namespace ServiceStack.Authentication.Azure
         // https://github.com/jfoshee/ServiceStack.Authentication.Aad/blob/master/ServiceStack.Authentication.Aad/AadAuthProvider.cs
         public override object Authenticate(IServiceBase authService, IAuthSession session, Authenticate request)
         {
-            // TODO: WARN: Property 'redirect' does not exist on type 'ServiceStack.Authenticate'
-            // TODO: WARN: Property 'code' does not exist on type 'ServiceStack.Authenticate'
-            // TODO: WARN: Property 'session_state' does not exist on type 'ServiceStack.Authenticate'
-            // TODO: The base Init() should strip the query string from the request URL
             if (CallbackUrl.IsNullOrEmpty())
             {
                 var uri = new Uri(authService.Request.AbsoluteUri);
@@ -175,16 +180,14 @@ namespace ServiceStack.Authentication.Azure
         {
             try
             {
-                var appDirectory = GetDirectoryNameFromUsername(session.UserName);
-
                 var appRegistry = authService.TryResolve<IApplicationRegistryService>();
                 if (appRegistry == null)
                     throw new InvalidOperationException(
                         $"No {nameof(IApplicationRegistryService)} found registered in AppHost.");
 
-                var registration = appRegistry.GetApplicationByDirectoryName(appDirectory);
+                var registration = OnApplicationRegistrationRequired(authService, appRegistry, session);
                 if (registration == null)
-                    throw new UnauthorizedAccessException($"Authorization for directory @{appDirectory} failed.");
+                    throw new UnauthorizedAccessException($"Authorization for directory failed.");
 
                 try
                 {
@@ -208,32 +211,17 @@ namespace ServiceStack.Authentication.Azure
                 {
                     return RedirectDueToFailure(authService, session, ase.ErrorData);
                 }
-
-//                var postData =
-//                    $"grant_type=authorization_code&redirect_uri={CallbackUrl.UrlEncode()}&code={code}&client_id={registration.ClientId}&client_secret={registration.ClientSecret.UrlEncode()}&scope={BuildScopesFragment()}";
-//                var result = MsGraph.TokenUrl.PostToUrl(postData);
-//
-//                var authInfo = JsonObject.Parse(result);
-//                var authInfoNvc = authInfo.ToNameValueCollection();
-//                if (HasError(authInfoNvc))
-//                    return RedirectDueToFailure(authService, session, authInfoNvc);
-//                tokens.AccessTokenSecret = authInfo["access_token"];
-//                tokens.RefreshToken = authInfo["refresh_token"];
-//                return OnAuthenticated(authService, session, tokens, authInfo.ToDictionary())
-//                       ?? authService.Redirect(SuccessRedirectUrlFilter(this, session.ReferrerUrl.SetParam("s", "1")));
             }
             catch (WebException webException)
             {
                 if (webException.Response == null)
-                {
                     return RedirectDueToFailure(authService, session, new NameValueCollection
                     {
                         {"error", webException.GetType().ToString()},
                         {"error_description", webException.Message}
                     });
-                }
                 Log.Error("Auth Failure", webException);
-                var response = ((HttpWebResponse) webException.Response);
+                var response = (HttpWebResponse) webException.Response;
                 var responseText = Encoding.UTF8.GetString(
                     response.GetResponseStream().ReadFully());
                 var errorInfo = JsonObject.Parse(responseText).ToNameValueCollection();
@@ -244,17 +232,15 @@ namespace ServiceStack.Authentication.Azure
         private object RequestCode(IServiceBase authService, Authenticate request, IAuthSession session,
             AuthUserSession userSession, IAuthTokens tokens)
         {
-            var appDirectory = GetDirectoryNameFromUsername(request.UserName);
-            session.UserName = request.UserName;
-
             var appRegistry = authService.TryResolve<IApplicationRegistryService>();
             if (appRegistry == null)
                 throw new InvalidOperationException(
                     $"No {nameof(IApplicationRegistryService)} found registered in AppHost.");
 
-            var registration = appRegistry.GetApplicationByDirectoryName(appDirectory);
+            session.UserName = request.UserName;
+            var registration = OnApplicationRegistrationRequired(authService, appRegistry, session);
             if (registration == null)
-                throw new UnauthorizedAccessException($"Authorization for directory @{appDirectory} failed.");
+                throw new UnauthorizedAccessException($"Authorization for directory failed.");
 
             var codeRequestData = _graphService.RequestAuthCode(new AuthCodeRequest
             {

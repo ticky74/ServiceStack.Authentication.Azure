@@ -1,15 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.4
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ServiceStack.Authentication.Azure.ServiceModel", "ServiceStack.Authentication.Azure.ServiceModel\ServiceStack.Authentication.Azure.ServiceModel.xproj", "{72EE7065-839C-4E7D-9943-9C6AF9C917E6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceStack.Authentication.Azure.ServiceModel", "ServiceStack.Authentication.Azure.ServiceModel\ServiceStack.Authentication.Azure.ServiceModel.csproj", "{72EE7065-839C-4E7D-9943-9C6AF9C917E6}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ServiceStack.Authentication.Azure", "ServiceStack.Authentication.Azure\ServiceStack.Authentication.Azure.xproj", "{216FEFFC-FEB0-4F95-A5B7-6FC8B4DD8FD3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceStack.Authentication.Azure", "ServiceStack.Authentication.Azure\ServiceStack.Authentication.Azure.csproj", "{216FEFFC-FEB0-4F95-A5B7-6FC8B4DD8FD3}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ServiceStack.Authentication.Azure.OrmLite", "ServiceStack.Authentication.Azure.OrmLite\ServiceStack.Authentication.Azure.OrmLite.xproj", "{3F8CF1FE-590A-4150-AD2F-C220763E0C76}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceStack.Authentication.Azure.OrmLite", "ServiceStack.Authentication.Azure.OrmLite\ServiceStack.Authentication.Azure.OrmLite.csproj", "{3F8CF1FE-590A-4150-AD2F-C220763E0C76}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ServiceStack.Authentication.Azure.Tests", "ServiceStack.Authentication.Azure.Tests\ServiceStack.Authentication.Azure.Tests.xproj", "{36972DDF-4B8B-45F0-BBD8-486C354E402F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceStack.Authentication.Azure.Tests", "ServiceStack.Authentication.Azure.Tests\ServiceStack.Authentication.Azure.Tests.csproj", "{36972DDF-4B8B-45F0-BBD8-486C354E402F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
