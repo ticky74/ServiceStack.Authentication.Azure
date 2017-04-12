@@ -35,11 +35,11 @@ Customizable Login Experience</PackageReleaseNotes>
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Data.Common" Version="4.1.0" />
-    <PackageReference Include="ServiceStack.Common.Core" Version="1.0.24" />
-    <PackageReference Include="ServiceStack.OrmLite.Core" Version="1.0.24" />
-    <PackageReference Include="ServiceStack.Text.Core" Version="1.0.24" />
-    <PackageReference Include="ServiceStack.Interfaces.Core" Version="1.0.24" />
+    <PackageReference Include="System.Data.Common" Version="4.3.0" />
+    <PackageReference Include="ServiceStack.Common.Core" Version="1.0.40" />
+    <PackageReference Include="ServiceStack.OrmLite.Core" Version="1.0.40" />
+    <PackageReference Include="ServiceStack.Text.Core" Version="1.0.40" />
+    <PackageReference Include="ServiceStack.Interfaces.Core" Version="1.0.40" />
   </ItemGroup>
 
 </Project>

@@ -5,6 +5,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net;
 using System.Text;
+using Microsoft.AspNetCore.Http.Internal;
 using ServiceStack.Auth;
 using ServiceStack.Authentication.Azure.ServiceModel;
 using ServiceStack.Authentication.Azure.ServiceModel.Entities;
@@ -86,15 +87,22 @@ namespace ServiceStack.Authentication.Azure
         // https://github.com/jfoshee/ServiceStack.Authentication.Aad/blob/master/ServiceStack.Authentication.Aad/AadAuthProvider.cs
         public override object Authenticate(IServiceBase authService, IAuthSession session, Authenticate request)
         {
+                var uri = new Uri(authService.Request.AbsoluteUri);
             if (CallbackUrl.IsNullOrEmpty())
             {
-                var uri = new Uri(authService.Request.AbsoluteUri);
                 CallbackUrl =
                     $"{uri.GetComponents(UriComponents.SchemeAndServer, UriFormat.SafeUnescaped)}/{uri.GetComponents(UriComponents.Path, UriFormat.SafeUnescaped)}";
             }
             var tokens = Init(authService, ref session, request);
-            var httpRequest = authService.Request;
-            var query = httpRequest.QueryString.ToNameValueCollection();
+            var query = new NameValueCollection();
+            var httpRequest = authService.Request.QueryString;
+            foreach (string s in httpRequest.AllKeys)
+            {
+                query.Add(s, httpRequest[s]);
+            }
+
+//            Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(authService.Request.AbsoluteUri)
+//                            .ForEach((key, values) => query.Add(key, values.ToString()));
             if (HasError(query))
             {
                 var result = RedirectDueToFailure(authService, session, query);
