@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>ServiceStack.Authentication.Azure</id>
-    <version>1.1.1</version>
+    <version>1.1.2</version>
     <title>ServiceStack Azure Authentication Provider</title>
     <authors>ticky74</authors>
     <owners>ticky74</owners>
@@ -17,7 +17,7 @@
     <copyright>Copyright 2016</copyright>
     <tags>ServiceStack Authentication Azure</tags>
     <dependencies>
-      <dependency id="ServiceStack.Authentication.Azure.ServiceModel" version="1.1.1" />
+      <dependency id="ServiceStack.Authentication.Azure.ServiceModel" version="1.1.2" />
     </dependencies>
   </metadata>
 </package>
