@@ -146,7 +146,7 @@ namespace ServiceStack.Authentication.Azure
 
             // See https://msdn.microsoft.com/en-us/office/office365/howto/authentication-v2-protocols
             var request = MsGraph.AuthorizationUrl + "/logout?client_id={0}&post_logout_redirect_uri={1}"
-                              .Fmt(clientId, "http://www.google.com");
+                              .Fmt(clientId, this.RedirectUrl);
             return authService.Redirect(LogoutUrlFilter(this, request));
         }
 
@@ -257,7 +257,8 @@ namespace ServiceStack.Authentication.Azure
                 Scopes = Scopes,
                 UserName = request.UserName
             });
-            tokens.Items.Add("ClientId", registration.ClientId);
+
+            tokens.Items["ClientId"] = registration.ClientId;
             userSession.State = codeRequestData.State;
             authService.SaveSession(session, SessionExpiry);
             return authService.Redirect(PreAuthUrlFilter(this, codeRequestData.AuthCodeRequestUrl));

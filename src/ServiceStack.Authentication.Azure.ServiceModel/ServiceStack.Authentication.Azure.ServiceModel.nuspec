@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>ServiceStack.Authentication.Azure.ServiceModel</id>
-    <version>1.1.2</version>
+    <version>1.1.3</version>
     <title>ServiceStack Azure Authentication Model Library</title>
     <authors>ticky74</authors>
     <owners>ticky74</owners>
