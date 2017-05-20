@@ -165,7 +165,12 @@ namespace ServiceStack.Authentication.Azure
                 tokens.PhoneNumber = meData.PhoneNumber;
 
                 var groups = _graphService.GetMemberGroups(accessToken);
-                tokens.Items["security-groups"] = JsonSerializer.SerializeToString(groups);
+								tokens.Items["id"] = meData.ID.ToString();
+								tokens.Items["jobtitle"] = meData.JobTitle;
+				tokens.Items["userprincipalname"] = meData.UserPrincipalName;
+				tokens.Items["officelocation"] = meData.OfficeLocation;
+				tokens.Items["businessphones"] = meData.BusinessPhones != null ? string.Join(";", meData.BusinessPhones) : string.Empty;
+				tokens.Items["security-groups"] = JsonSerializer.SerializeToString(groups);
             }
             catch
             {

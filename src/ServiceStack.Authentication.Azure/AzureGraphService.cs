@@ -42,14 +42,19 @@ namespace ServiceStack.Authentication.Azure
 
             var meInfo = JsonObject.Parse(azureReq);
             var meInfoNvc = meInfo.ToNameValueCollection();
-            var me = new Me
-            {
-                Email = meInfoNvc["mail"],
-                FirstName = meInfoNvc["givenName"],
-                LastName = meInfoNvc["surname"],
-                Language = meInfoNvc["preferredLanguage"],
-                PhoneNumber = meInfoNvc["mobilePhone"]
-            };
+			var me = new Me {
+				ID = meInfoNvc["id"].ConvertTo<Guid>(),
+				Email = meInfoNvc["mail"],
+				FirstName = meInfoNvc["givenName"],
+				LastName = meInfoNvc["surname"],
+				DisplayName = meInfoNvc["displayName"],
+				Language = meInfoNvc["preferredLanguage"],
+				PhoneNumber = meInfoNvc["mobilePhone"],
+				OfficeLocation = meInfoNvc["officeLocation"],
+				JobTitle = meInfoNvc["jobTitle"],
+				UserPrincipalName = meInfoNvc["userPrincipalName"],
+				BusinessPhones = meInfoNvc["businessPhones"].FromJson<string[]>()
+			};
 
             return me;
         }
