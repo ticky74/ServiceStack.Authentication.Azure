@@ -1,7 +1,6 @@
 ﻿using System.Net;
 using ServiceStack.Authentication.Azure;
 using ServiceStack.Authentication.Azure.OrmLite;
-using ServiceStack.Authentication.Azure;
 using ServiceStack.Authentication.Azure.ServiceModel;
 using ServiceStack.Authentication.Azure.ServiceModel.Entities;
 using ServiceStack.Authentication.Azure.ServiceModel.Requests;
