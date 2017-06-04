@@ -38,10 +38,10 @@ Issue #3 configurable redirect after logout</PackageReleaseNotes>
 
   <ItemGroup>
     <PackageReference Include="System.Data.Common" Version="4.3.0" />
-    <PackageReference Include="ServiceStack.Common.Core" Version="1.0.40" />
-    <PackageReference Include="ServiceStack.OrmLite.Core" Version="1.0.40" />
-    <PackageReference Include="ServiceStack.Text.Core" Version="1.0.40" />
-    <PackageReference Include="ServiceStack.Interfaces.Core" Version="1.0.40" />
+    <PackageReference Include="ServiceStack.Common.Core" Version="1.0.41" />
+    <PackageReference Include="ServiceStack.OrmLite.Core" Version="1.0.41" />
+    <PackageReference Include="ServiceStack.Text.Core" Version="1.0.41" />
+    <PackageReference Include="ServiceStack.Interfaces.Core" Version="1.0.41" />
   </ItemGroup>
 
 </Project>

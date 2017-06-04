@@ -2,15 +2,22 @@
 {
     public class Me
     {
-        #region Properties and Indexers
+		#region Properties and Indexers
 
-        public string Email { get; set; }
+				public System.Guid ID { get; set; }
+				public string Email { get; set; }
         public string FirstName { get; set; }
-        public string FullName => $"{FirstName} {LastName}".Trim();
-        public string Language { get; set; }
+		public string FullName => $"{FirstName} {LastName}".Trim();
+		public string DisplayName { get; set; }
+		public string Language { get; set; }
         public string LastName { get; set; }
         public string PhoneNumber { get; set; }
+				public string JobTitle { get; set; }
 
-        #endregion
-    }
+		public string UserPrincipalName { get; set; }
+		public string OfficeLocation { get; set; }
+		public string[] BusinessPhones { get; set; }
+
+		#endregion
+	}
 }

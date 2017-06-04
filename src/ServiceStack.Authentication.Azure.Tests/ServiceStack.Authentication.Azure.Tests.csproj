@@ -23,10 +23,10 @@
     <PackageReference Include="xunit.runner.visualstudio" Version="2.2.0" />
     <PackageReference Include="xunit" Version="2.2.0" />
     <PackageReference Include="Moq" Version="4.7.8" />
-    <PackageReference Include="ServiceStack.Server.Core" Version="1.0.40" />
-    <PackageReference Include="ServiceStack.OrmLite.Sqlite.Core" Version="1.0.40" />
-    <PackageReference Include="ServiceStack.OrmLite.Core" Version="1.0.40" />
-    <PackageReference Include="ServiceStack.Common.Core" Version="1.0.40" />
+    <PackageReference Include="ServiceStack.Server.Core" Version="1.0.41" />
+    <PackageReference Include="ServiceStack.OrmLite.Sqlite.Core" Version="1.0.41" />
+    <PackageReference Include="ServiceStack.OrmLite.Core" Version="1.0.41" />
+    <PackageReference Include="ServiceStack.Common.Core" Version="1.0.41" />
   </ItemGroup>
 
   <ItemGroup>
