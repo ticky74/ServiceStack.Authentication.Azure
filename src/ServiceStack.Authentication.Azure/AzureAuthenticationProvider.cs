@@ -153,9 +153,7 @@ namespace ServiceStack.Authentication.Azure
         public override IHttpResult OnAuthenticated(IServiceBase authService, IAuthSession session, IAuthTokens tokens,
             Dictionary<string, string> authInfo)
         {
-            try
-            {
-                var accessToken = authInfo["access_token"];
+			var accessToken = authInfo["access_token"];
 
                 var meData = _graphService.Me(accessToken);
                 tokens.FirstName = meData.FirstName;
@@ -164,19 +162,21 @@ namespace ServiceStack.Authentication.Azure
                 tokens.Language = meData.Language;
                 tokens.PhoneNumber = meData.PhoneNumber;
 
-                var groups = _graphService.GetMemberGroups(accessToken);
 								tokens.Items["id"] = meData.ID.ToString();
 								tokens.Items["jobtitle"] = meData.JobTitle;
 				tokens.Items["userprincipalname"] = meData.UserPrincipalName;
 				tokens.Items["officelocation"] = meData.OfficeLocation;
-				tokens.Items["businessphones"] = meData.BusinessPhones != null ? string.Join(";", meData.BusinessPhones) : string.Empty;
-				tokens.Items["security-groups"] = JsonSerializer.SerializeToString(groups);
-            }
-            catch
-            {
-                // Ignore
-            }
-            return base.OnAuthenticated(authService, session, tokens, authInfo);
+			tokens.Items["businessphones"] = meData.BusinessPhones != null ? string.Join(";", meData.BusinessPhones) : string.Empty;
+			try {
+				var groups = _graphService.GetMemberGroups(accessToken);
+				if (groups != null)
+					tokens.Items["security-groups"] = JsonSerializer.SerializeToString(groups);
+			} catch (WebException ex) {
+				Log.WarnFormat("Failed to fetch member groups");
+				if (!ex.IsForbidden())
+					throw;
+			}
+			return base.OnAuthenticated(authService, session, tokens, authInfo);
         }
 
         #endregion
