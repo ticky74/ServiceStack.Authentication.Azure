@@ -13,8 +13,7 @@ namespace ServiceStack.Authentication.Azure
 
         private string BuildScopesFragment(string[] scopes)
         {
-            return scopes.Select(
-                scope => $"{MsGraph.GraphUrl}/{scope} ").Join(" ").UrlEncode();
+            return scopes.Join(" ").UrlEncode();
         }
 
         #endregion
