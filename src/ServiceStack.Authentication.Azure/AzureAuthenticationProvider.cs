@@ -40,8 +40,7 @@ namespace ServiceStack.Authentication.Azure
         public AzureAuthenticationProvider(IAppSettings settings, IAzureGraphService graphService)
             : base(settings, MsGraph.Realm, MsGraph.ProviderName, "ClientId", "ClientSecret")
         {
-            // Default Scopes. Not sure if this is a bad idea @ticky74
-            Scopes = new[] {"User.Read", "offline_access", "openid", "profile"};
+            Scopes = new[] {"https://graph.microsoft.com/User.Read", "offline_access", "openid", "profile"};
             _graphService = graphService ?? new AzureGraphService();
             AppSettings = settings;
             if (ServiceStackHost.Instance != null)
@@ -160,7 +159,7 @@ namespace ServiceStack.Authentication.Azure
                 tokens.LastName = meData.LastName;
                 tokens.Email = meData.Email;
                 tokens.Language = meData.Language;
-                tokens.PhoneNumber = meData.PhoneNumber;
+                tokens.PhoneNumber = meData.MobileNumber;
 
 								tokens.Items["id"] = meData.ID.ToString();
 								tokens.Items["jobtitle"] = meData.JobTitle;

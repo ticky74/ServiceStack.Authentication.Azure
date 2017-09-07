@@ -41,7 +41,7 @@ namespace ServiceStack.Authentication.Azure20.Tests
                 FirstName = "Some",
                 Language = "en",
                 LastName = "User",
-                PhoneNumber = "15555551212"
+                MobileNumber = "15555551212"
             };
         }
 

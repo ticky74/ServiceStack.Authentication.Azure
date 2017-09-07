@@ -48,7 +48,7 @@ namespace ServiceStack.Authentication.Azure
 				LastName = meInfoNvc["surname"],
 				DisplayName = meInfoNvc["displayName"],
 				Language = meInfoNvc["preferredLanguage"],
-				PhoneNumber = meInfoNvc["mobilePhone"],
+				MobileNumber = meInfoNvc["mobilePhone"],
 				OfficeLocation = meInfoNvc["officeLocation"],
 				JobTitle = meInfoNvc["jobTitle"],
 				UserPrincipalName = meInfoNvc["userPrincipalName"],
