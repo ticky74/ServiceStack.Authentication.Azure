@@ -124,7 +124,7 @@ namespace ServiceStack.Authentication.Azure
                 throw new UnauthorizedAccessException("Mismatched state in code response.");
             }
 
-            return RequestAccessToken(authService, session, code, tokens);
+            return RequestAccessToken(authService, session, code, tokens, request);
         }
 
         public override object Logout(IServiceBase service, Authenticate request)
@@ -168,6 +168,7 @@ namespace ServiceStack.Authentication.Azure
 			tokens.Items["businessphones"] = meData.BusinessPhones != null ? string.Join(";", meData.BusinessPhones) : string.Empty;
 			try {
 				var groups = _graphService.GetMemberGroups(accessToken);
+
 				if (groups != null)
 					tokens.Items["security-groups"] = JsonSerializer.SerializeToString(groups);
 			} catch (WebException ex) {
@@ -188,7 +189,7 @@ namespace ServiceStack.Authentication.Azure
         }
 
         private object RequestAccessToken(IServiceBase authService, IAuthSession session, string code,
-            IAuthTokens tokens)
+            IAuthTokens tokens, Authenticate request)
         {
             try
             {
@@ -215,9 +216,29 @@ namespace ServiceStack.Authentication.Azure
                     tokens.AccessTokenSecret = tokenResponse.AccessToken;
                     tokens.RefreshToken = tokenResponse.RefreshToken;
 
-                    return OnAuthenticated(authService, session, tokens, tokenResponse.AuthData.ToDictionary())
-                           ??
-                           authService.Redirect(SuccessRedirectUrlFilter(this, session.ReferrerUrl.SetParam("s", "1")));
+                    var res = OnAuthenticated(authService, session, tokens, tokenResponse.AuthData.ToDictionary());
+                    
+                    if (res == null)
+                        return authService.Redirect(SuccessRedirectUrlFilter(this, session.ReferrerUrl.SetParam("s", "1")));
+
+                    if (!registration.AllowAllWindowsAuthUsers)
+                    {
+                        if (!tokens.Items.ContainsKey("security-groups"))
+                            throw HttpError.Unauthorized(ErrorMessages.WindowsAuthFailed);
+
+                        var groups = JsonSerializer.DeserializeFromString<string[]>(tokens.Items["security-groups"]);
+                        foreach(var requiredRole in registration.LimitAccessToRoles)
+                        {
+                            if (groups.Contains(requiredRole))
+                            {
+                                return res;
+                            }
+                        }
+                        
+                        throw HttpError.Unauthorized(ErrorMessages.WindowsAuthFailed);
+                    }
+
+                    return res;
                 }
                 catch (AzureServiceException ase)
                 {

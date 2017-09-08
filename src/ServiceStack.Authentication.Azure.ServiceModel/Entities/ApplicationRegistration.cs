@@ -1,8 +1,16 @@
+using System.Collections.Generic;
+using ServiceStack.DataAnnotations;
+
 namespace ServiceStack.Authentication.Azure.ServiceModel.Entities
 {
     public class ApplicationRegistration : Model.IHasLongId
     {
         #region Properties and Indexers
+        
+        public List<string> LimitAccessToRoles { get; set; }
+
+        [Ignore]
+        public bool AllowAllWindowsAuthUsers => LimitAccessToRoles?.Count > 0;
 
         [DataAnnotations.Required]
         [DataAnnotations.StringLength(38)]
