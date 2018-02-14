@@ -7,7 +7,7 @@
     <NeutralLanguage>en-US</NeutralLanguage>
     <VersionPrefix>2.0.0</VersionPrefix>
     <Authors>ticky74</Authors>
-    <TargetFrameworks>netstandard2.0;netcoreapp2.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <AssemblyName>ServiceStack.Authentication.Azure</AssemblyName>
     <PackageId>ServiceStack.Authentication.Azure</PackageId>
     <PackageTags>ServiceStack;Authentication;Azure;OrmLite</PackageTags>
@@ -37,15 +37,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.IdentityModel.Logging" Version="1.1.3" />
-    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="5.1.3" />
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.1.3" />
-    <PackageReference Include="ServiceStack.Common.Core" Version="1.0.44" />
-    <PackageReference Include="ServiceStack.OrmLite.Core" Version="1.0.44" />
-    <PackageReference Include="ServiceStack.Text.Core" Version="1.0.44" />
-    <PackageReference Include="ServiceStack.Interfaces.Core" Version="1.0.44" />
-    <PackageReference Include="ServiceStack.Server.Core" Version="1.0.44" />
-    <PackageReference Include="ServiceStack.Core" Version="1.0.44" />
+    <PackageReference Include="Microsoft.IdentityModel.Logging" Version="5.2.1" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="5.2.1" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.2.1" />
+    <PackageReference Include="ServiceStack.Common" Version="5.0.2" />
+    <PackageReference Include="ServiceStack.OrmLite" Version="5.0.2" />
+    <PackageReference Include="ServiceStack.Text" Version="5.0.2" />
+    <PackageReference Include="ServiceStack.Interfaces" Version="5.0.2" />
+    <PackageReference Include="ServiceStack.Server" Version="5.0.2" />
+    <PackageReference Include="ServiceStack" Version="5.0.2" />
   </ItemGroup>
 
 </Project>

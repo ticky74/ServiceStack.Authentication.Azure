@@ -86,7 +86,7 @@ namespace ServiceStack.Authentication.Azure20.Tests
             var result = Assert.Throws<HttpError>(() => service.Post(check));
             Assert.NotNull(result);
             Assert.IsAssignableFrom<HttpError>(result);
-            Assert.Equal(result.StatusCode, HttpStatusCode.BadRequest);
+            Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
         }
 
         #endregion

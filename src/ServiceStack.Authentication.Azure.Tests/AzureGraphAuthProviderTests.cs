@@ -139,13 +139,11 @@ namespace ServiceStack.Authentication.Azure.Tests
             var result = (IHttpResult)response;
             if (string.IsNullOrWhiteSpace(username))
             {
-                Assert.True(result.Headers["Location"].StartsWith(
-                    $"https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id={clientId}&response_type=code&redirect_uri=http%3a%2f%2flocalhost%2f&scope=https%3a%2f%2fgraph.microsoft.com%2fUser.Read+offline%5faccess+openid+profile"));
+                Assert.StartsWith($"https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id={clientId}&response_type=code&redirect_uri=http%3a%2f%2flocalhost%2f&scope=https%3a%2f%2fgraph.microsoft.com%2fUser.Read+offline%5faccess+openid+profile", result.Headers["Location"]);
             }
             else
             {
-                Assert.True(result.Headers["Location"].StartsWith(
-                    $"https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id={clientId}&response_type=code&redirect_uri=http%3a%2f%2flocalhost%2f&domain_hint={username}&scope=https%3a%2f%2fgraph.microsoft.com%2fUser.Read+offline%5faccess+openid+profile"));
+                Assert.StartsWith($"https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id={clientId}&response_type=code&redirect_uri=http%3a%2f%2flocalhost%2f&domain_hint={username}&scope=https%3a%2f%2fgraph.microsoft.com%2fUser.Read+offline%5faccess+openid+profile", result.Headers["Location"]);
             }
 
             var codeRequest = new Uri(result.Headers["Location"]);
@@ -156,7 +154,7 @@ namespace ServiceStack.Authentication.Azure.Tests
             {
                 Assert.Equal(username, query["domain_hint"]);
             }
-            Assert.Equal(query["response_type"], "code");
+            Assert.Equal("code", query["response_type"]);
             Assert.Equal(query["client_id"], clientId);
             Assert.Equal(query["redirect_uri"].UrlDecode(), subject.CallbackUrl);
         }
@@ -176,12 +174,11 @@ namespace ServiceStack.Authentication.Azure.Tests
              var response = subject.Authenticate(authService.Object, new AuthUserSession(), auth);
 
              var result = (IHttpResult)response;
-             Assert.True(result.Headers["Location"].StartsWith(
-                 "https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=clientid&response_type=code&redirect_uri=http%3a%2f%2flocalhost%2f&domain_hint=some.user@foodomain.com&scope=https%3a%2f%2fgraph.microsoft.com%2fUser.Read"));
+             Assert.StartsWith("https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=clientid&response_type=code&redirect_uri=http%3a%2f%2flocalhost%2f&domain_hint=some.user@foodomain.com&scope=https%3a%2f%2fgraph.microsoft.com%2fUser.Read", result.Headers["Location"]);
              var codeRequest = new Uri(result.Headers["Location"]);
              var query = PclExportClient.Instance.ParseQueryString(codeRequest.Query);
-             Assert.Equal(query["response_type"], "code");
-             Assert.Equal(query["client_id"], "clientid");
+             Assert.Equal("code", query["response_type"]);
+             Assert.Equal("clientid", query["client_id"]);
              Assert.Equal(query["redirect_uri"].UrlDecode(), subject.CallbackUrl);
              Assert.Equal("some.user@foodomain.com", query["domain_hint"]);
 
@@ -209,8 +206,8 @@ namespace ServiceStack.Authentication.Azure.Tests
             var result = (IHttpResult)response;
             var codeRequest = new Uri(result.Headers["Location"]);
             var query = PclExportClient.Instance.ParseQueryString(codeRequest.Query);
-            Assert.Equal(query["response_type"], "code");
-            Assert.Equal(subject.CallbackUrl, "http://localhost/auth/foo/bar");
+            Assert.Equal("code", query["response_type"]);
+            Assert.Equal("http://localhost/auth/foo/bar", subject.CallbackUrl);
             Assert.Equal(query["redirect_uri"].UrlDecode(), subject.CallbackUrl);
         }
 
@@ -229,7 +226,7 @@ namespace ServiceStack.Authentication.Azure.Tests
             };
 
             var request = new MockHttpRequest("auth", "GET", "text", "/auth/foo?error=invalid_request",
-                new NameValueCollection { { "error", "invalid_request" } }, Stream.Null, null);
+                new NameValueCollection { { "error", "invalid_request" } }, Stream.Null, new NameValueCollection());
             var mockAuthService = MockAuthService(request, appHost);
 
             var response = subject.Authenticate(mockAuthService.Object, new AuthUserSession(), auth);
@@ -296,29 +293,29 @@ namespace ServiceStack.Authentication.Azure.Tests
                     },
                     {"session_state", "7B29111D-C220-4263-99AB-6F6E135D75EF"},
                     {"state", "D79E5777-702E-4260-9A62-37F75FF22CCE"}
-                }, Stream.Null, null);
+                }, Stream.Null, new NameValueCollection());
 
             var mockAuthService = MockAuthService(request, appHost);
             var response = (IHttpResult)subject.Authenticate(mockAuthService.Object, session, auth);
             Assert.True(session.IsAuthenticated);
             var tokens = session.GetAuthTokens("ms-graph");
             Assert.NotNull(tokens);
-            Assert.Equal(tokens.Provider, "ms-graph");
+            Assert.Equal("ms-graph", tokens.Provider);
             Assert.Equal(tokens.AccessTokenSecret, TokenHelper.AccessToken);
             Assert.NotNull(tokens.RefreshTokenExpiry);
             Assert.Equal(tokens.RefreshToken, TokenHelper.RefreshToken);
 
             // Regardless of what is entered up front, Azure will determine what the identity values are
-            Assert.Equal(tokens.UserId, "d542096aa0b94e2195856b57e43257e4"); // oid
-            Assert.Equal(tokens.UserName, "some.user@foodomain.com");
-            Assert.Equal(tokens.DisplayName, "Some User");
+            Assert.Equal("d542096aa0b94e2195856b57e43257e4", tokens.UserId); // oid
+            Assert.Equal("some.user@foodomain.com", tokens.UserName);
+            Assert.Equal("Some User", tokens.DisplayName);
             Assert.Equal(session.UserName, tokens.UserName);
             Assert.Equal(session.LastName, tokens.LastName);
             Assert.Equal(session.FirstName, tokens.FirstName);
             Assert.Equal(session.DisplayName, tokens.DisplayName);
 
             var result = (IHttpResult)response;
-            Assert.True(result.Headers["Location"].StartsWith("http://localhost#s=1"));
+            Assert.StartsWith("http://localhost#s=1", result.Headers["Location"]);
         }
 
         [Fact, Order(5)]
@@ -348,7 +345,7 @@ namespace ServiceStack.Authentication.Azure.Tests
                     },
                     {"session_state", "7B29111D-C220-4263-99AB-6F6E135D75EF"},
                     {"state", "D79E5777-702E-4260-9A62-37F75FF22CCE"}
-                }, Stream.Null, null)
+                }, Stream.Null, new NameValueCollection())
             {
                 HttpMethod = "POST",
                 Items =
@@ -361,10 +358,10 @@ namespace ServiceStack.Authentication.Azure.Tests
             {
                 StringResultFn = (tokenRequest, s) =>
                 {
-                    Assert.Equal(tokenRequest.RequestUri.ToString(),
-                        "https://login.microsoftonline.com/common/oauth2/v2.0/token");
-                    Assert.Equal(tokenRequest.Method, "POST");
-                    Assert.Equal(tokenRequest.ContentType, "application/x-www-form-urlencoded");
+                    Assert.Equal("https://login.microsoftonline.com/common/oauth2/v2.0/token",
+                        tokenRequest.RequestUri.ToString());
+                    Assert.Equal("POST", tokenRequest.Method);
+                    Assert.Equal("application/x-www-form-urlencoded", tokenRequest.ContentType);
                     return TokenHelper.GetIdToken();
                 }
             })
@@ -374,22 +371,22 @@ namespace ServiceStack.Authentication.Azure.Tests
                 Assert.True(session.IsAuthenticated);
                 var tokens = session.GetAuthTokens("ms-graph");
                 Assert.NotNull(tokens);
-                Assert.Equal(tokens.Provider, "ms-graph");
+                Assert.Equal("ms-graph", tokens.Provider);
                 Assert.Equal(tokens.AccessTokenSecret, TokenHelper.AccessToken);
                 Assert.NotNull(tokens.RefreshTokenExpiry);
                 Assert.Equal(tokens.RefreshToken, TokenHelper.RefreshToken);
 
-                Assert.Equal(tokens.UserId, "d542096aa0b94e2195856b57e43257e4"); // oid
-                Assert.Equal(tokens.UserName, "some.user@foodomain.com");
-                Assert.Equal(tokens.LastName, "User");
-                Assert.Equal(tokens.FirstName, "Some");
-                Assert.Equal(tokens.DisplayName, "Some User");
+                Assert.Equal("d542096aa0b94e2195856b57e43257e4", tokens.UserId); // oid
+                Assert.Equal("some.user@foodomain.com", tokens.UserName);
+                Assert.Equal("User", tokens.LastName);
+                Assert.Equal("Some", tokens.FirstName);
+                Assert.Equal("Some User", tokens.DisplayName);
                 Assert.Equal(session.UserName, tokens.UserName);
                 Assert.Equal(session.LastName, tokens.LastName);
                 Assert.Equal(session.FirstName, tokens.FirstName);
                 Assert.Equal(session.DisplayName, tokens.DisplayName);
                 var result = (IHttpResult)response;
-                Assert.True(result.Headers["Location"].StartsWith("http://localhost#s=1"));
+                Assert.StartsWith("http://localhost#s=1", result.Headers["Location"]);
             }
         }
 
@@ -419,7 +416,7 @@ namespace ServiceStack.Authentication.Azure.Tests
 
             var result = subject.Authenticate(mockAuthService.Object, session, auth); // subject.Post(auth);
 
-            Assert.Equal(session.ReferrerUrl, "http://localhost/myapp/secure-resource");
+            Assert.Equal("http://localhost/myapp/secure-resource", session.ReferrerUrl);
         }
 
         [Fact, Order(5)]
@@ -436,7 +433,7 @@ namespace ServiceStack.Authentication.Azure.Tests
                 {
                     {"code", "code123"},
                     {"state", "D79E5777-702E-4260-9A62-37F75FF22CCE"}
-                }, Stream.Null, null);
+                }, Stream.Null, new NameValueCollection());
             var mockAuthService = MockAuthService(request, appHost);
             using (new HttpResultsFilter
             {
@@ -498,7 +495,7 @@ namespace ServiceStack.Authentication.Azure.Tests
                     {"code", "code123"},
                     {"session_state", "dontcare"},
                     {"state", "state123"}
-                }, Stream.Null, null);
+                }, Stream.Null, new NameValueCollection());
             var mockAuthService = MockAuthService(request);
             using (new HttpResultsFilter
             {

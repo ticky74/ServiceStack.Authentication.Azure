@@ -91,7 +91,7 @@ namespace ServiceStack.Authentication.Azure20.Tests
             Assert.NotNull(result);
             Assert.NotSame(result, Directory1);
             Assert.True(result.Id > 0);
-            Assert.Equal(result.ClientSecret, "secret");
+            Assert.Equal("secret", result.ClientSecret);
             Assert.Equal(result.DirectoryName, Directory1.DirectoryName);
             Assert.Null(result.RefId);
             Assert.Null(result.RefIdStr);
