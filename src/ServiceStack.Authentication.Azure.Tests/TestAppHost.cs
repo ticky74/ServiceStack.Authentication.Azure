@@ -12,7 +12,7 @@ namespace ServiceStack.Authentication.Azure.Tests
     public class TestAppHost : AppHostBase
     {
         public TestAppHost()
-                : base("Unit Test Host", typeof(TestAppHost).GetAssembly())
+                : base("Unit Test Host", typeof(TestAppHost).Assembly)
         {
 
         }
