@@ -5,12 +5,12 @@
     <Copyright>Copyright 2016</Copyright>
     <AssemblyTitle>ServiceStack Azure Authentication Model Library</AssemblyTitle>
     <NeutralLanguage>en-US</NeutralLanguage>
-    <VersionPrefix>2.0.0</VersionPrefix>
+    <VersionPrefix>2.1.0</VersionPrefix>
     <Authors>ticky74</Authors>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <AssemblyName>ServiceStack.Authentication.Azure.OrmLite</AssemblyName>
     <PackageId>ServiceStack.Authentication.Azure.OrmLite</PackageId>
-    <PackageTags>ServiceStack;Authentication;Azure;OrmLite</PackageTags>
+    <PackageTags>ServiceStack;Authentication;Azure;Authorization;Security;OrmLite</PackageTags>
     <PackageProjectUrl>https://github.com/ticky74/ServiceStack.Authentication.Azure</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/ticky74/ServiceStack.Authentication.Azure/blob/master/LICENSE</PackageLicenseUrl>
     <!-- <NetStandardImplicitPackageVersion>1.6.0</NetStandardImplicitPackageVersion>
@@ -19,15 +19,13 @@
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <Version>2.0.0</Version>
+    <Version>2.1.0</Version>
     <PackageIconUrl>https://kode4storage.blob.core.windows.net/static-resources/img/k4icon-transparent-120X120.png</PackageIconUrl>
     <RepositoryUrl>https://github.com/ticky74/ServiceStack.Authentication.Azure</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <AssemblyVersion>2.0.0.0</AssemblyVersion>
-    <FileVersion>2.0.0.0</FileVersion>
-    <PackageReleaseNotes>v2.0
-      Upgrade to dotnetcore2.0
-      Implemented #4
+    <AssemblyVersion>2.1.0.0</AssemblyVersion>
+    <FileVersion>2.1.0.0</FileVersion>
+    <PackageReleaseNotes>ServiceStack references updated to v5.0.2 thanks to @JNappee
     </PackageReleaseNotes>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
   </PropertyGroup>
