@@ -39,9 +39,9 @@ namespace ServiceStack.Authentication.Azure
 
         public const string GraphUrl = "https://graph.microsoft.com";
 
-        public const string AuthorizationUrl = "https://login.microsoftonline.com/common/oauth2/v2.0/authorize";
+        public const string DefaultAuthorizationUrl = "https://login.microsoftonline.com/common/oauth2/v2.0/authorize";
 
-        public const string TokenUrl = "https://login.microsoftonline.com/common/oauth2/v2.0/token";
+        public const string DefaultTokenUrl = "https://login.microsoftonline.com/common/oauth2/v2.0/token";
 
         public const string Realm = "https://login.microsoftonline.com/";
 

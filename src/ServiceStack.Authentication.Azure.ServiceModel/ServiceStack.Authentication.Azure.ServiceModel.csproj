@@ -19,7 +19,7 @@
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <Version>2.0.0</Version>
+    <Version>2.0.2</Version>
     <PackageIconUrl>https://kode4storage.blob.core.windows.net/static-resources/img/k4icon-transparent-120X120.png</PackageIconUrl>
     <RepositoryUrl>https://github.com/ticky74/ServiceStack.Authentication.Azure</RepositoryUrl>
     <RepositoryType>git</RepositoryType>

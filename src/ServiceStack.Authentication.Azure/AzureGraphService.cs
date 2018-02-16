@@ -11,6 +11,15 @@ namespace ServiceStack.Authentication.Azure
     {
         #region Private
 
+        private readonly string _overrideAuthUrl;
+        private readonly string _overrideTokenUrl;
+        public AzureGraphService(string overrideAuthUrl = null, string overrideTokenUrl = null)
+        {
+            _overrideAuthUrl = overrideAuthUrl ?? MsGraph.DefaultAuthorizationUrl;
+            _overrideTokenUrl = overrideTokenUrl ?? MsGraph.DefaultTokenUrl;
+        }
+
+
         private string BuildScopesFragment(string[] scopes)
         {
             return scopes.Join(" ").UrlEncode();
@@ -65,7 +74,7 @@ namespace ServiceStack.Authentication.Azure
                 ? ""
                 : $"&domain_hint={codeRequest.UserName}";
             var reqUrl =
-                $"{MsGraph.AuthorizationUrl}?client_id={codeRequest.Registration.ClientId}&response_type=code&redirect_uri={codeRequest.CallbackUrl.UrlEncode()}{domainHint}&scope={BuildScopesFragment(codeRequest.Scopes)}&state={state}";
+                $"{_overrideAuthUrl}?client_id={codeRequest.Registration.ClientId}&response_type=code&redirect_uri={codeRequest.CallbackUrl.UrlEncode()}{domainHint}&scope={BuildScopesFragment(codeRequest.Scopes)}&state={state}";
             return new AuthCodeRequestData
             {
                 AuthCodeRequestUrl = reqUrl,
@@ -92,12 +101,12 @@ namespace ServiceStack.Authentication.Azure
 
             var postData =
                 $"grant_type=authorization_code&redirect_uri={tokenRequest.CallbackUrl.UrlEncode()}&code={tokenRequest.RequestCode}&client_id={tokenRequest.Registration.ClientId}&client_secret={tokenRequest.Registration.ClientSecret.UrlEncode()}&scope={BuildScopesFragment(tokenRequest.Scopes)}";
-            var result = MsGraph.TokenUrl.PostToUrl(postData);
+            var result = _overrideTokenUrl.PostToUrl(postData);
 
             var authInfo = JsonObject.Parse(result);
             var authInfoNvc = authInfo.ToNameValueCollection();
             if (MsGraph.RespondedWithError(authInfoNvc))
-                throw new AzureServiceException(MsGraph.TokenUrl, authInfoNvc);
+                throw new AzureServiceException(_overrideTokenUrl, authInfoNvc);
 
             return new TokenResponse
             {

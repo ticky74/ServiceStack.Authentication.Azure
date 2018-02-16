@@ -5,7 +5,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net;
 using System.Text;
-using Microsoft.AspNetCore.Http.Internal;
+using Microsoft.IdentityModel.Tokens;
 using ServiceStack.Auth;
 using ServiceStack.Authentication.Azure.ServiceModel;
 using ServiceStack.Authentication.Azure.ServiceModel.Entities;
@@ -27,8 +27,8 @@ namespace ServiceStack.Authentication.Azure
 
         #region Constructors
 
-        public AzureAuthenticationProvider()
-            : this(new AzureGraphService())
+        public AzureAuthenticationProvider(string overrideAuthUrl = null, string overrideTokenUrl = null)
+            : this(new AzureGraphService(overrideAuthUrl, overrideTokenUrl))
         {
         }
 
@@ -40,7 +40,7 @@ namespace ServiceStack.Authentication.Azure
         public AzureAuthenticationProvider(IAppSettings settings, IAzureGraphService graphService)
             : base(settings, MsGraph.Realm, MsGraph.ProviderName, "ClientId", "ClientSecret")
         {
-            Scopes = new[] {"https://graph.microsoft.com/User.Read", "offline_access", "openid", "profile"};
+            Scopes = new[] { "https://graph.microsoft.com/User.Read", "offline_access", "openid", "profile" };
             _graphService = graphService ?? new AzureGraphService();
             AppSettings = settings;
             if (ServiceStackHost.Instance != null)
@@ -71,13 +71,81 @@ namespace ServiceStack.Authentication.Azure
         public string[] Scopes { get; set; }
 
         public Func<IServiceBase, IApplicationRegistryService, IAuthSession, ApplicationRegistration>
-            ApplicationDirectoryResolver { get; set; } =
+            ApplicationDirectoryResolver
+        { get; set; } =
             (serviceBase, registryService, authSession) =>
             {
                 var directoryName = GetDirectoryNameFromUsername(authSession.UserName);
                 return registryService.GetApplicationByDirectoryName(directoryName);
             };
 
+        #region Validate token helpers taken from OAuth2Provider
+        // taken from OAuth2Provider class https://github.com/ServiceStack/ServiceStack/blob/master/src/ServiceStack.Authentication.OAuth2/OAuth2Provider.cs
+        // and GoogleOAuth2Provider class  https://github.com/ServiceStack/ServiceStack/blob/master/src/ServiceStack.Authentication.OAuth2/GoogleOAuth2Provider.cs
+        public string VerifyAccessTokenUrl { get; set; } = "https://www.googleapis.com/oauth2/v1/tokeninfo?access_token={0}";
+        public string UserProfileUrl { get; set; }
+
+        private object AuthenticateWithAccessToken(IServiceBase authService, IAuthSession session, IAuthTokens tokens, string accessToken)
+        {
+            tokens.AccessToken = accessToken;
+
+            var authInfo = this.CreateAuthInfo(accessToken);
+
+            session.IsAuthenticated = true;
+
+            return OnAuthenticated(authService, session, tokens, authInfo);
+        }
+
+        public bool OnVerifyAccessToken(string token)
+        {
+            string stsDiscoveryEndpoint = "https://login.microsoftonline.com/common/v2.0/.well-known/openid-configuration";
+
+            //This code requires non .netstandard2.0 dependencies (Microsoft.IdentityModel.Protocols.OpenIdConnect)
+
+            //var configManager = new ConfigurationManager<OpenIdConnectConfiguration>(stsDiscoveryEndpoint);
+
+            //var config = configManager.GetConfigurationAsync().Result;
+
+            TokenValidationParameters validationParameters = new TokenValidationParameters
+            {
+                ValidateAudience = false,
+                ValidateIssuer = false,
+                IssuerSigningTokens = config.SigningTokens,
+                ValidateLifetime = false
+            };
+
+            JwtSecurityTokenHandler tokendHandler = new JwtSecurityTokenHandler();
+
+            SecurityToken jwt;
+
+            var result = tokendHandler.ValidateToken(token, validationParameters, out jwt);
+
+            return jwt as JwtSecurityToken == null;
+        }
+
+        protected Dictionary<string, string> CreateAuthInfo(string accessToken)
+        {
+            var url = this.UserProfileUrl.AddQueryParam("access_token", accessToken);
+            string json = url.GetJsonFromUrl();
+            var obj = JsonObject.Parse(json);
+            var authInfo = new Dictionary<string, string>
+            {
+                { "user_id", obj["id"] },
+                { "username", obj["email"] },
+                { "email", obj["email"] },
+                { "name", obj["name"] },
+                { "first_name", obj["given_name"] },
+                { "last_name", obj["family_name"] },
+                { "gender", obj["gender"] },
+                { "birthday", obj["birthday"] },
+                { "link", obj["link"] },
+                { "picture", obj["picture"] },
+                { "locale", obj["locale"] },
+                { AuthMetadataProvider.ProfileUrlKey, obj["picture"] },
+            };
+            return authInfo;
+        }
+        #endregion
         #endregion
 
         #region Public/Internal
@@ -86,13 +154,34 @@ namespace ServiceStack.Authentication.Azure
         // https://github.com/jfoshee/ServiceStack.Authentication.Aad/blob/master/ServiceStack.Authentication.Aad/AadAuthProvider.cs
         public override object Authenticate(IServiceBase authService, IAuthSession session, Authenticate request)
         {
-                var uri = new Uri(authService.Request.AbsoluteUri);
+            var uri = new Uri(authService.Request.AbsoluteUri);
             if (CallbackUrl.IsNullOrEmpty())
             {
                 CallbackUrl =
                     $"{uri.GetComponents(UriComponents.SchemeAndServer, UriFormat.SafeUnescaped)}/{uri.GetComponents(UriComponents.Path, UriFormat.SafeUnescaped)}";
             }
             var tokens = Init(authService, ref session, request);
+
+            // taken from OAuth2Provider class https://github.com/ServiceStack/ServiceStack/blob/master/src/ServiceStack.Authentication.OAuth2/OAuth2Provider.cs
+            {
+                //Transfering AccessToken/Secret from Mobile/Desktop App to Server
+                if (request?.AccessToken != null)
+                {
+                    if (!OnVerifyAccessToken(request.AccessToken))
+                        return HttpError.Unauthorized($"AccessToken is not for the configured {Provider} App");
+
+                    var failedResult = AuthenticateWithAccessToken(authService, session, tokens, request.AccessToken);
+                    var isHtml = authService.Request.IsHtml();
+                    if (failedResult != null)
+                        return ConvertToClientError(failedResult, isHtml);
+
+                    return isHtml
+                        ? authService.Redirect(SuccessRedirectUrlFilter(this, session.ReferrerUrl.SetParam("s", "1")))
+                        : null; //return default AuthenticateResponse
+                }
+            }
+
+
             var query = new NameValueCollection();
             var httpRequest = authService.Request.QueryString;
             foreach (string s in httpRequest.AllKeys)
@@ -100,8 +189,6 @@ namespace ServiceStack.Authentication.Azure
                 query.Add(s, httpRequest[s]);
             }
 
-//            Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(authService.Request.AbsoluteUri)
-//                            .ForEach((key, values) => query.Add(key, values.ToString()));
             if (HasError(query))
             {
                 var result = RedirectDueToFailure(authService, session, query);
@@ -144,7 +231,7 @@ namespace ServiceStack.Authentication.Azure
                 return null;
 
             // See https://msdn.microsoft.com/en-us/office/office365/howto/authentication-v2-protocols
-            var request = MsGraph.AuthorizationUrl + "/logout?client_id={0}&post_logout_redirect_uri={1}"
+            var request = MsGraph.DefaultAuthorizationUrl + "/logout?client_id={0}&post_logout_redirect_uri={1}"
                               .Fmt(clientId, this.RedirectUrl);
             return authService.Redirect(LogoutUrlFilter(this, request));
         }
@@ -152,31 +239,34 @@ namespace ServiceStack.Authentication.Azure
         public override IHttpResult OnAuthenticated(IServiceBase authService, IAuthSession session, IAuthTokens tokens,
             Dictionary<string, string> authInfo)
         {
-			var accessToken = authInfo["access_token"];
+            var accessToken = authInfo["access_token"];
 
-                var meData = _graphService.Me(accessToken);
-                tokens.FirstName = meData.FirstName;
-                tokens.LastName = meData.LastName;
-                tokens.Email = meData.Email;
-                tokens.Language = meData.Language;
-                tokens.PhoneNumber = meData.MobileNumber;
+            var meData = _graphService.Me(accessToken);
+            tokens.FirstName = meData.FirstName;
+            tokens.LastName = meData.LastName;
+            tokens.Email = meData.Email;
+            tokens.Language = meData.Language;
+            tokens.PhoneNumber = meData.MobileNumber;
 
-								tokens.Items["id"] = meData.ID.ToString();
-								tokens.Items["jobtitle"] = meData.JobTitle;
-				tokens.Items["userprincipalname"] = meData.UserPrincipalName;
-				tokens.Items["officelocation"] = meData.OfficeLocation;
-			tokens.Items["businessphones"] = meData.BusinessPhones != null ? string.Join(";", meData.BusinessPhones) : string.Empty;
-			try {
-				var groups = _graphService.GetMemberGroups(accessToken);
+            tokens.Items["id"] = meData.ID.ToString();
+            tokens.Items["jobtitle"] = meData.JobTitle;
+            tokens.Items["userprincipalname"] = meData.UserPrincipalName;
+            tokens.Items["officelocation"] = meData.OfficeLocation;
+            tokens.Items["businessphones"] = meData.BusinessPhones != null ? string.Join(";", meData.BusinessPhones) : string.Empty;
+            try
+            {
+                var groups = _graphService.GetMemberGroups(accessToken);
 
-				if (groups != null)
-					tokens.Items["security-groups"] = JsonSerializer.SerializeToString(groups);
-			} catch (WebException ex) {
-				Log.WarnFormat("Failed to fetch member groups");
-				if (!ex.IsForbidden())
-					throw;
-			}
-			return base.OnAuthenticated(authService, session, tokens, authInfo);
+                if (groups != null)
+                    tokens.Items["security-groups"] = JsonSerializer.SerializeToString(groups);
+            }
+            catch (WebException ex)
+            {
+                Log.WarnFormat("Failed to fetch member groups");
+                if (!ex.IsForbidden())
+                    throw;
+            }
+            return base.OnAuthenticated(authService, session, tokens, authInfo);
         }
 
         #endregion
@@ -217,7 +307,7 @@ namespace ServiceStack.Authentication.Azure
                     tokens.RefreshToken = tokenResponse.RefreshToken;
 
                     var res = OnAuthenticated(authService, session, tokens, tokenResponse.AuthData.ToDictionary());
-                    
+
                     if (res == null)
                         return authService.Redirect(SuccessRedirectUrlFilter(this, session.ReferrerUrl.SetParam("s", "1")));
 
@@ -227,14 +317,14 @@ namespace ServiceStack.Authentication.Azure
                             throw HttpError.Unauthorized(ErrorMessages.WindowsAuthFailed);
 
                         var groups = JsonSerializer.DeserializeFromString<string[]>(tokens.Items["security-groups"]);
-                        foreach(var requiredRole in registration.LimitAccessToRoles)
+                        foreach (var requiredRole in registration.LimitAccessToRoles)
                         {
                             if (groups.Contains(requiredRole))
                             {
                                 return res;
                             }
                         }
-                        
+
                         throw HttpError.Unauthorized(ErrorMessages.WindowsAuthFailed);
                     }
 
@@ -254,7 +344,7 @@ namespace ServiceStack.Authentication.Azure
                         {"error_description", webException.Message}
                     });
                 Log.Error("Auth Failure", webException);
-                var response = (HttpWebResponse) webException.Response;
+                var response = (HttpWebResponse)webException.Response;
                 var responseText = Encoding.UTF8.GetString(
                     response.GetResponseStream().ReadFully());
                 var errorInfo = JsonObject.Parse(responseText).ToNameValueCollection();
@@ -358,10 +448,10 @@ namespace ServiceStack.Authentication.Azure
             {
                 var jwt = new JwtSecurityToken(authInfo["id_token"]);
                 var p = jwt.Payload;
-                tokens.UserId = (string) p["oid"];
-                tokens.UserName = (string) p["preferred_username"];
-                tokens.DisplayName = (string) p.GetValueOrDefault("name");
-                tokens.Items.Add("TenantId", (string) p["tid"]);
+                tokens.UserId = (string)p["oid"];
+                tokens.UserName = (string)p["preferred_username"];
+                tokens.DisplayName = (string)p.GetValueOrDefault("name");
+                tokens.Items.Add("TenantId", (string)p["tid"]);
                 tokens.RefreshTokenExpiry = jwt.ValidFrom.Add(RefreshTokenLifespan);
 
 
